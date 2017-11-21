@@ -1,4 +1,4 @@
-package com.greywanchuang.rackmonitor.model;
+package com.greywanchuang.rackmonitor.entities;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

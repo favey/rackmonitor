@@ -1,5 +1,6 @@
 package com.greywanchuang.rackmonitor.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.entity.Property;
 import com.greywanchuang.rackmonitor.repository.PropertyRepository;
@@ -29,15 +30,18 @@ public class MonitorDataController {
     @ApiOperation(value = "getRackType", notes = "获取机柜型号")
     @RequestMapping(value = "type", method = RequestMethod.GET)
     public String rackType() {
-        List<Property> properties=propertyRepository.findByTargetidAndName(970,"PartNumber");
+        int timestamp=propertyRepository.findNewstTimstamp();
+        Property property=propertyRepository.findByTargetidAndNameAndTimestamp(970,"PartNumber",timestamp);
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("type",properties.get(0).getValue());
+        jsonObject.put("type",property.getValue());
         return jsonObject.toJSONString();
     }
 
     @ApiOperation(value = "getRackDetail", notes = "获取机柜信息")
     @RequestMapping(value = "rack", method = RequestMethod.GET)
     public String rackDetail() {
+        int timestamp=propertyRepository.findNewstTimstamp();
+        List<Property> properties=propertyRepository.findAllByTimestamp(timestamp);
 
         return "";
     }
@@ -84,6 +88,7 @@ public class MonitorDataController {
     @ApiOperation(value = "getPowerEnergyComsuption", notes = "获取电源的能耗情况")
     @RequestMapping(value = "comsumption", method = RequestMethod.GET)
     public String powerEnergyComsuption() {
+
         return "";
     }
 }

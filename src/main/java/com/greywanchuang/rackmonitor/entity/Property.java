@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Property {
     @Id
     @GeneratedValue
-    private  int id;
+    private int id;
 
     @Column
     private int targetid;
@@ -19,7 +19,7 @@ public class Property {
     private String value;
 
     @Column
-    private String timestamp;
+    private int timestamp;
 
     public int getId() {
         return id;
@@ -53,11 +53,11 @@ public class Property {
         this.value = value;
     }
 
-    public String getTimestamp() {
+    public int getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
     }
 }

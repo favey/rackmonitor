@@ -8,10 +8,14 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PropertyRepository extends JpaRepository<Property,Integer> {
-    List<Property> findByTargetidAndName(int targetId,String name);
+
+    Property findByTargetidAndNameAndTimestamp(int targetId,String name,int timestamp);
+
+    List<Property> findAllByTimestamp(int timestamp);
 
     @Query(" from Property p where p.targetid= :targetid ")
     List<Property> findPropertiesByTargetid(@Param("targetid")int targetid);
 
-
+    @Query(value = "select timestamp from property p group by p.timestamp order by p.timestamp DESC limit 1",nativeQuery = true)
+    int findNewstTimstamp();
 }

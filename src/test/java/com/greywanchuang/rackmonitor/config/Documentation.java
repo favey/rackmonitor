@@ -1,7 +1,7 @@
 package com.greywanchuang.rackmonitor.config;
 
 import com.alibaba.fastjson.JSON;
-import com.greywanchuang.rackmonitor.entities.Student;
+import com.greywanchuang.rackmonitor.entity.Student;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;

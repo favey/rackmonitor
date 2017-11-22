@@ -1,6 +1,6 @@
 package com.greywanchuang.rackmonitor.controller;
 
-import com.greywanchuang.rackmonitor.entities.Student;
+import com.greywanchuang.rackmonitor.entity.Student;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;

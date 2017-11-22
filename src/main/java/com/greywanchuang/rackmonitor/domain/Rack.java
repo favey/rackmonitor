@@ -1,7 +1,11 @@
 package com.greywanchuang.rackmonitor.domain;
 
+import com.greywanchuang.rackmonitor.entity.Property;
+
+import java.util.List;
+
 public class Rack {
-    private String model;
+    private StringBuffer model = new StringBuffer("");
     private String sn;
     private String health;
     private String location;
@@ -12,11 +16,11 @@ public class Rack {
     private String ipmode;
     private String firmware;
 
-    public String getModel() {
+    public StringBuffer getModel() {
         return model;
     }
 
-    public void setModel(String model) {
+    public void setModel(StringBuffer model) {
         this.model = model;
     }
 
@@ -91,4 +95,38 @@ public class Rack {
     public void setFirmware(String firmware) {
         this.firmware = firmware;
     }
+
+    /**
+     * 组装rack对象
+     *
+     * @param properties
+     * @return
+     */
+    public Rack compose(List<Property> properties,Rack rack ) {
+        properties.forEach(property -> {
+            if ("Manufacturer".equals(property.getName()) || "PartNumber".equals(property.getName())) {
+                rack.getModel().append(property.getValue());
+            } else if ("Location".equals(property.getName())) {
+                rack.setLocation(property.getValue());
+            } else if ("Health".equals(property.getName())) {
+                rack.setHealth(property.getValue());
+            } else if ("SN".equals(property.getName())) {
+                rack.setSn(property.getValue());
+            } else if ("EnTemp".equals(property.getName())) {
+                rack.setEntemp(Integer.parseInt(property.getValue()));
+            } else if ("IP".equals(property.getName())) {
+                rack.setIp(property.getValue());
+            } else if ("IPMode".equals(property.getName())) {
+                rack.setIpmode(property.getValue());
+            } else if ("NetMask".equals(property.getName())) {
+                rack.setNetmask(property.getValue());
+            } else if ("Firmware".equals(property.getName())) {
+                rack.setFirmware(property.getValue());
+            } else if ("MAC".equals(property.getName())) {
+                rack.setMac(property.getValue());
+            }
+        });
+        return rack;
+    }
+
 }

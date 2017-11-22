@@ -2,6 +2,7 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.greywanchuang.rackmonitor.domain.Rack;
 import com.greywanchuang.rackmonitor.entity.Property;
 import com.greywanchuang.rackmonitor.repository.PropertyRepository;
 import com.greywanchuang.rackmonitor.repository.RelationRepository;
@@ -30,20 +31,21 @@ public class MonitorDataController {
     @ApiOperation(value = "getRackType", notes = "获取机柜型号")
     @RequestMapping(value = "type", method = RequestMethod.GET)
     public String rackType() {
-        int timestamp=propertyRepository.findNewstTimstamp();
-        Property property=propertyRepository.findByTargetidAndNameAndTimestamp(970,"PartNumber",timestamp);
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("type",property.getValue());
+        int timestamp = propertyRepository.findNewstTimstamp();
+        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(970, "PartNumber", timestamp);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", property.getValue());
         return jsonObject.toJSONString();
     }
 
     @ApiOperation(value = "getRackDetail", notes = "获取机柜信息")
     @RequestMapping(value = "rack", method = RequestMethod.GET)
     public String rackDetail() {
-        int timestamp=propertyRepository.findNewstTimstamp();
-        List<Property> properties=propertyRepository.findAllByTimestamp(timestamp);
-
-        return "";
+        int timestamp = propertyRepository.findNewstTimstamp();
+        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, 970);
+        Rack rack = new Rack();
+        rack.compose(properties, rack);
+        return JSONObject.toJSONString(rack);
     }
 
     @ApiOperation(value = "getRackFrontPanel", notes = "获取机柜前面板信息")

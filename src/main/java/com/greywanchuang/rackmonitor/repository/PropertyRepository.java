@@ -11,7 +11,7 @@ public interface PropertyRepository extends JpaRepository<Property,Integer> {
 
     Property findByTargetidAndNameAndTimestamp(int targetId,String name,int timestamp);
 
-    List<Property> findAllByTimestamp(int timestamp);
+    List<Property> findAllByTimestampAndTargetid(int timestamp,int targetid);
 
     @Query(" from Property p where p.targetid= :targetid ")
     List<Property> findPropertiesByTargetid(@Param("targetid")int targetid);

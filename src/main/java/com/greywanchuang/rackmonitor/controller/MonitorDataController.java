@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.domain.Rack;
 import com.greywanchuang.rackmonitor.entity.Property;
+import com.greywanchuang.rackmonitor.entity.Relation;
+import com.greywanchuang.rackmonitor.entity.Target;
 import com.greywanchuang.rackmonitor.repository.PropertyRepository;
 import com.greywanchuang.rackmonitor.repository.RelationRepository;
 import com.greywanchuang.rackmonitor.repository.TargetReposiroty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +35,8 @@ public class MonitorDataController {
     @RequestMapping(value = "type", method = RequestMethod.GET)
     public String rackType() {
         int timestamp = propertyRepository.findNewstTimstamp();
-        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(970, "PartNumber", timestamp);
+        List<Relation> relations = relationPRepository.findByParent(-1);
+        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(relations.get(0).getChild(), "PartNumber", timestamp);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", property.getValue());
         return jsonObject.toJSONString();
@@ -42,7 +46,7 @@ public class MonitorDataController {
     @RequestMapping(value = "rack", method = RequestMethod.GET)
     public String rackDetail() {
         int timestamp = propertyRepository.findNewstTimstamp();
-        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, 970);
+        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, relationPRepository.findByParent(-1).get(0).getChild());
         Rack rack = new Rack();
         rack.compose(properties, rack);
         return JSONObject.toJSONString(rack);
@@ -69,7 +73,15 @@ public class MonitorDataController {
 
     @ApiOperation(value = "getServerDetail", notes = "获取服务器基本信息")
     @RequestMapping(value = "server_detail", method = RequestMethod.GET)
-    public String serverDetail() {
+    public String serverDetail(@Param(value = "id") String servername) {
+        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
+        serverTargetName.append(servername).append("/");
+        Target target = targetReposiroty.getByName(serverTargetName.toString());
+        int timestamp = propertyRepository.findNewstTimstamp();
+        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
+        properties.forEach(relation -> {
+
+        });
         return "";
     }
 

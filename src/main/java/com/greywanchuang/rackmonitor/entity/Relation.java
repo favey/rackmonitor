@@ -14,7 +14,7 @@ public class Relation {
     private int parent;
 
     @Column
-    private  int chiled;
+    private  int child;
 
     public int getId() {
         return id;
@@ -32,11 +32,11 @@ public class Relation {
         this.parent = parent;
     }
 
-    public int getChiled() {
-        return chiled;
+    public int getChild() {
+        return child;
     }
 
-    public void setChiled(int chiled) {
-        this.chiled = chiled;
+    public void setChild(int child) {
+        this.child = child;
     }
 }

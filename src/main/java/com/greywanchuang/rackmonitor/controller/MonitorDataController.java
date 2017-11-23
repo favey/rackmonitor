@@ -1,8 +1,8 @@
 package com.greywanchuang.rackmonitor.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.domain.Rack;
+import com.greywanchuang.rackmonitor.domain.Server;
 import com.greywanchuang.rackmonitor.entity.Property;
 import com.greywanchuang.rackmonitor.entity.Relation;
 import com.greywanchuang.rackmonitor.entity.Target;
@@ -11,9 +11,9 @@ import com.greywanchuang.rackmonitor.repository.RelationRepository;
 import com.greywanchuang.rackmonitor.repository.TargetReposiroty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -73,16 +73,15 @@ public class MonitorDataController {
 
     @ApiOperation(value = "getServerDetail", notes = "获取服务器基本信息")
     @RequestMapping(value = "server_detail", method = RequestMethod.GET)
-    public String serverDetail(@Param(value = "id") String servername) {
+    public String serverDetail(@RequestParam("id") String servername) {
         StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
         serverTargetName.append(servername).append("/");
         Target target = targetReposiroty.getByName(serverTargetName.toString());
         int timestamp = propertyRepository.findNewstTimstamp();
         List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
-        properties.forEach(relation -> {
-
-        });
-        return "";
+        Server server = new Server();
+        server.compose(properties);
+        return JSONObject.toJSONString(server);
     }
 
 

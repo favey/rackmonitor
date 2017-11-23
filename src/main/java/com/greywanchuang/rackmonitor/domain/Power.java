@@ -1,11 +1,19 @@
 package com.greywanchuang.rackmonitor.domain;
 
+import com.greywanchuang.rackmonitor.entity.Property;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Power {
     private String status;
     private String health;
-    private int input;
-    private int output;
-    private int efficiency;
+    private String firmware;
+    private int psuamount;
+    private String controlmode;
+    private int maxpower;
+    private List<PSU> psuA = new ArrayList<>();
+    private List<PSU> psuB = new ArrayList<>();
 
     public String getStatus() {
         return status;
@@ -23,27 +31,106 @@ public class Power {
         this.health = health;
     }
 
-    public int getInput() {
-        return input;
+    public String getFirmware() {
+        return firmware;
     }
 
-    public void setInput(int input) {
-        this.input = input;
+    public void setFirmware(String firmware) {
+        this.firmware = firmware;
     }
 
-    public int getOutput() {
-        return output;
+    public int getPsuamount() {
+        return psuamount;
     }
 
-    public void setOutput(int output) {
-        this.output = output;
+    public void setPsuamount(int psuamount) {
+        this.psuamount = psuamount;
     }
 
-    public int getEfficiency() {
-        return efficiency;
+    public String getControlmode() {
+        return controlmode;
     }
 
-    public void setEfficiency(int efficiency) {
-        this.efficiency = efficiency;
+    public void setControlmode(String controlmode) {
+        this.controlmode = controlmode;
+    }
+
+    public int getMaxpower() {
+        return maxpower;
+    }
+
+    public void setMaxpower(int maxpower) {
+        this.maxpower = maxpower;
+    }
+
+    public List<PSU> getPsuA() {
+        return psuA;
+    }
+
+    public void setPsuA(List<PSU> psuA) {
+        this.psuA = psuA;
+    }
+
+    public List<PSU> getPsuB() {
+        return psuB;
+    }
+
+    public void setPsuB(List<PSU> psuB) {
+        this.psuB = psuB;
+    }
+
+    private void addPsuA(PSU psu) {
+        this.psuA.add(psu);
+    }
+
+    private void addPsuB(PSU psu) {
+        this.psuB.add(psu);
+    }
+
+    /**
+     * 组装server自身属性
+     *
+     * @param properties
+     */
+    public void composeServer(List<Property> properties) {
+        properties.forEach(property -> {
+            if ("Firmware".equals(property.getName())) {
+                this.setFirmware(property.getValue());
+
+            } else if ("Status".equals(property.getName())) {
+                this.setStatus(property.getValue());
+            } else if ("Health".equals(property.getName())) {
+                this.setHealth(property.getValue());
+            } else if ("PSUAmount".equals(property.getName())) {
+                this.setPsuamount(Integer.parseInt(property.getValue()));
+            } else if ("MaxPower".equals(property.getName())) {
+                this.setMaxpower(Integer.parseInt(property.getValue()));
+            } else if ("PSUControlMode".equals(property.getName())) {
+                this.setControlmode(property.getValue());
+            }
+        });
+    }
+
+    /**
+     * 组装PSU属性
+     *
+     * @param properties
+     */
+    public void composePUSs(List<Property> properties, String targetName) {
+        PSU psu = new PSU();
+        properties.forEach(property -> {
+            if ("Health".equals(property.getName())) {
+                psu.setHealth(property.getValue());
+            } else if ("OutputVoltage".equals(property.getName())) {
+                psu.setVoltage(Integer.parseInt(property.getValue()));
+            } else if ("OutputCurrent".equals(property.getName())) {
+                psu.setCurrent(Integer.parseInt(property.getValue()));
+            }
+        });
+        if (targetName.contains("A")) {
+            addPsuA(psu);
+        } else {
+            addPsuB(psu);
+        }
     }
 }

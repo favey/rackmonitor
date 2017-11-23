@@ -1,5 +1,6 @@
 package com.greywanchuang.rackmonitor.domain;
 
+import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.entity.Property;
 
 import java.util.ArrayList;
@@ -209,5 +210,36 @@ public class Server {
 
             this.addNet(net);
         });
+    }
+
+    /**
+     * 组装指定属性
+     * @param properties
+     * @return
+     */
+    public static JSONObject conposeJson(List<Property> properties,String targetname)
+    {
+        JSONObject jsonObject=new JSONObject();
+        properties.forEach(property -> {
+            if("Status".equals(property.getName()))
+            {
+                jsonObject.put("status",property.getValue());
+            }else if("Health".equals(property.getName()))
+            {
+                jsonObject.put("health",property.getValue());
+            }else if("EnTemp".equals(property.getName()))
+            {
+                jsonObject.put("entemp",property.getValue());
+            }else if("ExTemp".equals(property.getName()))
+            {
+                jsonObject.put("extemp",property.getValue());
+            }else if("Power".equals(property.getName()))
+            {
+                jsonObject.put("power",property.getValue());
+            }
+        });
+        String[] names=targetname.split("/");
+        jsonObject.put("name",names[names.length-1]);
+        return jsonObject;
     }
 }

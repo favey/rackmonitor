@@ -2,6 +2,7 @@ package com.greywanchuang.rackmonitor.domain;
 
 public class Fan {
     private int id;
+    private String health;
     private int speed;
 
     public int getId() {
@@ -18,5 +19,13 @@ public class Fan {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public String getHealth() {
+        return health;
+    }
+
+    public void setHealth(String health) {
+        this.health = health;
     }
 }

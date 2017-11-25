@@ -18,6 +18,9 @@ public interface PropertyRepository extends JpaRepository<Property,Integer> {
     @Query(" from Property p where p.targetid= :targetid ")
     List<Property> findPropertiesByTargetid(@Param("targetid")int targetid);
 
-    @Query(value = "select timestamp from property p group by p.timestamp order by p.timestamp DESC limit 1",nativeQuery = true)
-    int findNewstTimstamp();
+    @Query(value = "select timestamp from property p group by p.timestamp order by p.timestamp DESC limit :count",nativeQuery = true)
+    List<Integer> findNewstTimstamp(@Param("count")int count);
+
+    @Query(" from Property p where p.targetid= :targetid and p.timestamp= :timestamp and name in ('EnTemp','ExTemp')")
+    List<Property> findPowerTemps(@Param("timestamp")int timestamp,@Param("targetid")int targetid);
 }

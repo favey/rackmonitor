@@ -13,10 +13,7 @@ import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +30,7 @@ public class MonitorDataController {
     private TargetReposiroty targetReposiroty;
 
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackType", notes = "获取机柜型号")
     @RequestMapping(value = "type", method = RequestMethod.GET)
     public String rackType() {
@@ -44,6 +42,7 @@ public class MonitorDataController {
         return jsonObject.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackDetail", notes = "获取机柜信息")
     @RequestMapping(value = "rack_detail", method = RequestMethod.GET)
     public String rackDetail() {
@@ -54,6 +53,7 @@ public class MonitorDataController {
         return JSONObject.toJSONString(rack);
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackFrontPanel", notes = "获取机柜前面板信息")
     @RequestMapping(value = "front_panel", method = RequestMethod.GET)
     public String rackFrontPanel() {
@@ -93,6 +93,7 @@ public class MonitorDataController {
         return jsonObject.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerComsumption", notes = "获取过去二十分钟的电源能耗数据")
     @RequestMapping(value = "power_comsumption", method = RequestMethod.GET)
     public String getTwentyMinPower() {
@@ -110,6 +111,7 @@ public class MonitorDataController {
         return powerJsons.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackBackPanel", notes = "获取机柜背面板信息")
     @RequestMapping(value = "back_panel", method = RequestMethod.GET)
     public String rackBackPanel() {
@@ -143,6 +145,7 @@ public class MonitorDataController {
     }
 
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerDetail", notes = "获取电源详细信息")
     @RequestMapping(value = "power_detail", method = RequestMethod.GET)
     public String powerDetail() {
@@ -163,6 +166,7 @@ public class MonitorDataController {
         return JSONObject.toJSONString(power);
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getServerDetail", notes = "获取服务器基本信息")
     @RequestMapping(value = "server_detail", method = RequestMethod.GET)
     public String serverDetail(@RequestParam("id") String servername) {
@@ -176,6 +180,7 @@ public class MonitorDataController {
         return JSONObject.toJSONString(server);
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerEnergyComsuption", notes = "获取电源的能耗情况")
     @RequestMapping(value = "comsumption", method = RequestMethod.GET)
     public String powerEnergyComsuption() {
@@ -219,6 +224,7 @@ public class MonitorDataController {
         return jsonObject.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerEnergyComsuptions", notes = "获取过去三十分钟的能耗情况数据，共16组")
     @RequestMapping(value = "comsumptions", method = RequestMethod.GET)
     public String thirtyMinsComsuptions() {
@@ -267,6 +273,7 @@ public class MonitorDataController {
         return comsumptionJsons.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "/server_temps", notes = "获取服务器过去三十分钟的内外温度数据，共十六组")
     @RequestMapping(value = "server_temps", method = RequestMethod.GET)
     public String serverTemps(@RequestParam("id") String serverName) {
@@ -292,6 +299,7 @@ public class MonitorDataController {
         return tempsJson.toJSONString();
     }
 
+    @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "/server_comsumption", notes = "获取服务器过去三十分钟的能耗数据，共十六组")
     @RequestMapping(value = "server_comsumption", method = RequestMethod.GET)
     public String serverComsumption(@RequestParam("id") String serverName) {

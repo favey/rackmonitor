@@ -187,40 +187,47 @@ public class MonitorDataController {
         JSONObject jsonObject = new JSONObject();
         int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
 
-        List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
-        int psuPower = 0;
-        for (Integer psuId : powerTargetIds) {
-            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+        int fansComsumption=propertyRepository.countSingleComsumptionStatics(1012,1051,timestamp);
+        jsonObject.put("fans", fansComsumption);
+        int serverComsumption=propertyRepository.countSingleComsumptionStatics(972,1011,timestamp);
+        jsonObject.put("servers", serverComsumption);
+        int psuComsumption=propertyRepository.countSingleComsumptionStatics(1053,1062,timestamp);
+        jsonObject.put("psus", psuComsumption);
 
-            for (Property property : powerPs) {
-                psuPower += Integer.parseInt(property.getValue());
-            }
-        }
-        jsonObject.put("psus", psuPower);
+//        List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
+//        int psuPower = 0;
+//        for (Integer psuId : powerTargetIds) {
+//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//            for (Property property : powerPs) {
+//                psuPower += Integer.parseInt(property.getValue());
+//            }
+//        }
+//        jsonObject.put("psus", psuPower);
+//
+//        List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
+//        int fanPower = 0;
+//        for (Integer psuId : fanTargetIds) {
+//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//            for (Property property : powerPs) {
+//                fanPower += Integer.parseInt(property.getValue());
+//            }
+//        }
+//        jsonObject.put("fans", fanPower);
+//
+//        List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
+//        int serverPower = 0;
+//        for (Integer psuId : serverTargetIds) {
+//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//            for (Property property : powerPs) {
+//                serverPower += Integer.parseInt(property.getValue());
+//            }
+//        }
+//        jsonObject.put("servers", serverPower);
 
-        List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
-        int fanPower = 0;
-        for (Integer psuId : fanTargetIds) {
-            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-
-            for (Property property : powerPs) {
-                fanPower += Integer.parseInt(property.getValue());
-            }
-        }
-        jsonObject.put("fans", fanPower);
-
-        List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
-        int serverPower = 0;
-        for (Integer psuId : serverTargetIds) {
-            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-
-            for (Property property : powerPs) {
-                serverPower += Integer.parseInt(property.getValue());
-            }
-        }
-        jsonObject.put("servers", serverPower);
-
-        jsonObject.put("total", psuPower + fanPower + serverPower);
+        jsonObject.put("total", fansComsumption + serverComsumption + psuComsumption);
         return jsonObject.toJSONString();
     }
 
@@ -233,38 +240,44 @@ public class MonitorDataController {
         timestamps.forEach(timestamp -> {
             JSONObject jsonObject = new JSONObject();
 
-            List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
-            int psuPower = 0;
-            for (Integer psuId : powerTargetIds) {
-                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-
-                for (Property property : powerPs) {
-                    psuPower += Integer.parseInt(property.getValue());
-                }
-            }
-            jsonObject.put("psus", psuPower);
-
-            List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
-            int fanPower = 0;
-            for (Integer psuId : fanTargetIds) {
-                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-
-                for (Property property : powerPs) {
-                    fanPower += Integer.parseInt(property.getValue());
-                }
-            }
-            jsonObject.put("fans", fanPower);
-
-            List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
-            int serverPower = 0;
-            for (Integer psuId : serverTargetIds) {
-                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-
-                for (Property property : powerPs) {
-                    serverPower += Integer.parseInt(property.getValue());
-                }
-            }
-            jsonObject.put("servers", serverPower);
+            int fansComsumption=propertyRepository.countSingleComsumptionStatics(1012,1051,timestamp);
+            jsonObject.put("fans", fansComsumption);
+            int serverComsumption=propertyRepository.countSingleComsumptionStatics(972,1011,timestamp);
+            jsonObject.put("servers", serverComsumption);
+            int psuComsumption=propertyRepository.countSingleComsumptionStatics(1053,1062,timestamp);
+            jsonObject.put("psus", psuComsumption);
+//            List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
+//            int psuPower = 0;
+//            for (Integer psuId : powerTargetIds) {
+//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//                for (Property property : powerPs) {
+//                    psuPower += Integer.parseInt(property.getValue());
+//                }
+//            }
+//            jsonObject.put("psus", psuPower);
+//
+//            List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
+//            int fanPower = 0;
+//            for (Integer psuId : fanTargetIds) {
+//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//                for (Property property : powerPs) {
+//                    fanPower += Integer.parseInt(property.getValue());
+//                }
+//            }
+//            jsonObject.put("fans", fanPower);
+//
+//            List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
+//            int serverPower = 0;
+//            for (Integer psuId : serverTargetIds) {
+//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
+//
+//                for (Property property : powerPs) {
+//                    serverPower += Integer.parseInt(property.getValue());
+//                }
+//            }
+//            jsonObject.put("servers", serverPower);
             jsonObject.put("timestamp", Utils.dateFommat(timestamp));
 
             comsumptionJsons.add(jsonObject);

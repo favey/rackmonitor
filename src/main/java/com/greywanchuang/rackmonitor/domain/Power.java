@@ -122,9 +122,9 @@ public class Power {
             if ("Health".equals(property.getName())) {
                 psu.setHealth(property.getValue());
             } else if ("OutputVoltage".equals(property.getName())) {
-                psu.setVoltage(Integer.parseInt(property.getValue()));
+                psu.setVoltage(Float.parseFloat(property.getValue()));
             } else if ("OutputCurrent".equals(property.getName())) {
-                psu.setCurrent(Integer.parseInt(property.getValue()));
+                psu.setCurrent(Float.parseFloat(property.getValue()));
             }
         });
         if (targetName.contains("A")) {

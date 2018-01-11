@@ -34,11 +34,11 @@ public class MonitorDataController {
     @ApiOperation(value = "getRackType", notes = "获取机柜型号")
     @RequestMapping(value = "type", method = RequestMethod.GET)
     public String rackType() {
-        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
-        List<Relation> relations = relationPRepository.findByParent(-1);
-        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(relations.get(0).getChild(), "PartNumber", timestamp);
+//        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
+//        List<Relation> relations = relationPRepository.findByParent(-1);
+//        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(relations.get(0).getChild(), "PartNumber", timestamp);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", property.getValue());
+        jsonObject.put("type", "42U");
         return jsonObject.toJSONString();
     }
 

@@ -18,17 +18,17 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.chinamobile.iot.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.greywanchuang.rackmonitor.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Student info query api")
-                .description("Some API to operator student information")
+                .title("DCSV API")
+                .description("格雷皖创Smashmonitor API 接口文档" )
                 .termsOfServiceUrl("http://iot.10086.com/")
-                .version("1.0")
+                .version("1.0.0")
                 .build();
     }
 

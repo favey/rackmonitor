@@ -1,7 +1,6 @@
 package com.greywanchuang.rackmonitor.config;
 
 import com.alibaba.fastjson.JSON;
-import com.greywanchuang.rackmonitor.entity.Student;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
@@ -61,15 +60,15 @@ public class Documentation {
                 .andExpect(status().isOk())
                 .andDo(document("getStudent", preprocessResponse(prettyPrint())));
 
-        Student student = new Student();
-        student.setName("xxx");
-        student.setAge(23);
-        student.setAddress("湖北麻城");
-        student.setCls("二年级");
-        student.setSex("男");
+//        Student student = new Student();
+//        student.setName("xxx");
+//        student.setAge(23);
+//        student.setAddress("湖北麻城");
+//        student.setCls("二年级");
+//        student.setSex("男");
 
         mockMvc.perform(post("/student").contentType(MediaType.APPLICATION_JSON)
-                .content(JSON.toJSONString(student))
+//                .content(JSON.toJSONString(student))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(document("addStudent", preprocessResponse(prettyPrint())));

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/")
 public class MonitorDataController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackType", notes = "获取机柜型号")
-    @RequestMapping(value = "type", method = RequestMethod.GET)
+    @RequestMapping(value = "/type", method = RequestMethod.GET)
     public String rackType() {
 //        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
 //        List<Relation> relations = relationPRepository.findByParent(-1);
@@ -44,7 +45,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackDetail", notes = "获取机柜信息")
-    @RequestMapping(value = "rack_detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/rack_detail", method = RequestMethod.GET)
     public String rackDetail() {
         List<Integer> timestamp = propertyRepository.findNewstTimstamp(1);
         List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp.get(0), relationPRepository.findByParent(-1).get(0).getChild());
@@ -55,7 +56,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackFrontPanel", notes = "获取机柜前面板信息")
-    @RequestMapping(value = "front_panel", method = RequestMethod.GET)
+    @RequestMapping(value = "/front_panel", method = RequestMethod.GET)
     public String rackFrontPanel() {
         int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
         //获取Power信息
@@ -95,7 +96,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerComsumption", notes = "获取过去二十分钟的电源能耗数据")
-    @RequestMapping(value = "power_comsumption", method = RequestMethod.GET)
+    @RequestMapping(value = "/power_comsumption", method = RequestMethod.GET)
     public String getTwentyMinPower() {
         JSONArray powerJsons = new JSONArray();
         List<Integer> timestamps = propertyRepository.findNewstTimstamp(11);
@@ -113,7 +114,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getRackBackPanel", notes = "获取机柜背面板信息")
-    @RequestMapping(value = "back_panel", method = RequestMethod.GET)
+    @RequestMapping(value = "/back_panel", method = RequestMethod.GET)
     public String rackBackPanel() {
         JSONArray fangroupsJson = new JSONArray();
 
@@ -147,7 +148,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerDetail", notes = "获取电源详细信息")
-    @RequestMapping(value = "power_detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/power_detail", method = RequestMethod.GET)
     public String powerDetail() {
         StringBuffer serverTargetName = new StringBuffer("system/power1/");
         Target target = targetReposiroty.getByName(serverTargetName.toString());
@@ -168,7 +169,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getServerDetail", notes = "获取服务器基本信息")
-    @RequestMapping(value = "server_detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
     public String serverDetail(@RequestParam("id") String servername) {
         StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
         serverTargetName.append(servername).append("/");
@@ -182,7 +183,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerEnergyComsuption", notes = "获取电源的能耗情况")
-    @RequestMapping(value = "comsumption", method = RequestMethod.GET)
+    @RequestMapping(value = "/comsumption", method = RequestMethod.GET)
     public String powerEnergyComsuption() {
         JSONObject jsonObject = new JSONObject();
         int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
@@ -233,7 +234,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "getPowerEnergyComsuptions", notes = "获取过去三十分钟的能耗情况数据，共16组")
-    @RequestMapping(value = "comsumptions", method = RequestMethod.GET)
+    @RequestMapping(value = "/comsumptions", method = RequestMethod.GET)
     public String thirtyMinsComsuptions() {
         JSONArray comsumptionJsons = new JSONArray();
         List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
@@ -288,7 +289,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "/server_temps", notes = "获取服务器过去三十分钟的内外温度数据，共十六组")
-    @RequestMapping(value = "server_temps", method = RequestMethod.GET)
+    @RequestMapping(value = "/server_temps", method = RequestMethod.GET)
     public String serverTemps(@RequestParam("id") String serverName) {
         JSONArray tempsJson = new JSONArray();
         List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
@@ -314,7 +315,7 @@ public class MonitorDataController {
 
     @CrossOrigin(origins = "*",maxAge = 3600)
     @ApiOperation(value = "/server_comsumption", notes = "获取服务器过去三十分钟的能耗数据，共十六组")
-    @RequestMapping(value = "server_comsumption", method = RequestMethod.GET)
+    @RequestMapping(value = "/server_comsumption", method = RequestMethod.GET)
     public String serverComsumption(@RequestParam("id") String serverName) {
         JSONArray tempsJson = new JSONArray();
         List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);

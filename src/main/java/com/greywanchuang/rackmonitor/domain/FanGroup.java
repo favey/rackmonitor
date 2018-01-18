@@ -77,7 +77,7 @@ public class FanGroup {
             } else if ("Health".equals(property.getName())) {
                 fan.setHealth(property.getValue());
             } else if ("Speed".equals(property.getName())) {
-                fan.setHealth(property.getValue());
+                fan.setSpeed(Integer.parseInt(property.getValue()));
             }
         });
         this.addFan(fan);

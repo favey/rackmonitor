@@ -14,10 +14,10 @@ public class User {
     private String userName;
 
     @Column
-    private  String pwd;
+    private String pwd;
 
     @Column
-    private  String email;
+    private String email;
 
     @Column
     private int timestamp;
@@ -65,16 +65,16 @@ public class User {
 
     /**
      * 用于生成随机密码
+     *
      * @param length 密码长度
      * @return 随机密码
      */
-    public String generateRandomStr(int length)
-    {
-        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public String generateRandomStr(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
 
-        for(int i = 0 ; i < length; ++i){
+        for (int i = 0; i < length; ++i) {
             int number = random.nextInt(62);//[0,62)
 
             sb.append(str.charAt(number));
@@ -84,27 +84,28 @@ public class User {
 
     /**
      * 用于生成随机密码
+     *
      * @param length 密码长度
      * @return 随机密码
      */
     @Deprecated
-    public  String getRandomStr2(int length){
+    public String getRandomStr2(int length) {
         Random random = new Random();
 
         StringBuffer sb = new StringBuffer();
 
-        for(int i = 0; i < length; ++i){
+        for (int i = 0; i < length; ++i) {
             int number = random.nextInt(3);
             long result = 0;
 
-            switch(number){
+            switch (number) {
                 case 0:
                     result = Math.round(Math.random() * 25 + 65);
-                    sb.append(String.valueOf((char)result));
+                    sb.append(String.valueOf((char) result));
                     break;
                 case 1:
                     result = Math.round(Math.random() * 25 + 97);
-                    sb.append(String.valueOf((char)result));
+                    sb.append(String.valueOf((char) result));
                     break;
                 case 2:
                     sb.append(String.valueOf(new Random().nextInt(10)));
@@ -113,12 +114,4 @@ public class User {
         }
         return sb.toString();
     }
-
-    public static void main(String[] argv)
-    {
-        User user=new User();
-        System.out.println(user.generateRandomStr(6));
-        System.out.println(user.getRandomStr2(10));
-    }
-
 }

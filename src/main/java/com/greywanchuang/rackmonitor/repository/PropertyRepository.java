@@ -24,14 +24,8 @@ public interface PropertyRepository extends JpaRepository<Property,Integer> {
     @Query(" from Property p where p.targetid= :targetid and p.timestamp= :timestamp and name in ('EnTemp','ExTemp')")
     List<Property> findPowerTemps(@Param("timestamp")int timestamp,@Param("targetid")int targetid);
 
-//    @Query("select count(value) from property where name='Power' and targetid between 1012 AND 1051 and timestamp in (select timestamp from property group by timestamp order by timestamp DESC)")
-//    int countTotalFanComsumption();
-//
-//    @Query("select count(value) from property where name='Power' and targetid between 972 AND 1011 and timestamp in (select timestamp from property group by timestamp order by timestamp DESC)")
-//    int countTotalServerComsumption();
-//
-//    @Query("select count(value) from property where name='Power' and targetid between 1053 AND 1062 and timestamp in (select timestamp from property group by timestamp order by timestamp DESC)")
-//    int countTotalPSUComsumption();
+
+
 
     @Query(value = "select count(value) from property where name='Power' and targetid between :startid AND :endid and timestamp = :timestamp",nativeQuery = true)
     int countSingleComsumptionStatics(@Param("startid")int startid,@Param("endid")int endid,@Param("timestamp")int timestamp);

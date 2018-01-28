@@ -2,6 +2,7 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.domain.*;
 import com.greywanchuang.rackmonitor.entity.Property;
 import com.greywanchuang.rackmonitor.entity.Relation;
@@ -11,14 +12,17 @@ import com.greywanchuang.rackmonitor.repository.RelationRepository;
 import com.greywanchuang.rackmonitor.repository.TargetReposiroty;
 import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/v1")
 public class MonitorDataController {
 
     @Autowired
@@ -31,20 +35,25 @@ public class MonitorDataController {
     private TargetReposiroty targetReposiroty;
 
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getRackType", notes = "获取机柜型号")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜型号", notes = "获取机柜型号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/type", method = RequestMethod.GET)
     public String rackType() {
-//        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
-//        List<Relation> relations = relationPRepository.findByParent(-1);
-//        Property property = propertyRepository.findByTargetidAndNameAndTimestamp(relations.get(0).getChild(), "PartNumber", timestamp);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "42U");
         return jsonObject.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getRackDetail", notes = "获取机柜信息")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜信息", notes = "获取机柜信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/rack_detail", method = RequestMethod.GET)
     public String rackDetail() {
         List<Integer> timestamp = propertyRepository.findNewstTimstamp(1);
@@ -54,8 +63,31 @@ public class MonitorDataController {
         return JSONObject.toJSONString(rack);
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getRackFrontPanel", notes = "获取机柜前面板信息")
+    @Authorization
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取最新时间戳", notes = "获取最新时间戳")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @RequestMapping(value = "/time", method = RequestMethod.GET)
+    public String getLatestTime() {
+        List<Integer> timestamp = propertyRepository.findNewstTimstamp(1);
+        JSONObject jsonObject = new JSONObject();
+        if (jsonObject.size() == 0) {
+            jsonObject.put("timestamp", Calendar.getInstance().getTimeInMillis());
+
+        } else {
+            jsonObject.put("timestamp", timestamp.get(0));
+        }
+        return jsonObject.toJSONString();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜前面板信息", notes = "获取机柜前面板信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/front_panel", method = RequestMethod.GET)
     public String rackFrontPanel() {
         int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
@@ -94,8 +126,12 @@ public class MonitorDataController {
         return jsonObject.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getPowerComsumption", notes = "获取过去二十分钟的电源能耗数据")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取过去二十分钟的电源能耗数据", notes = "获取过去二十分钟的电源能耗数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/power_comsumption", method = RequestMethod.GET)
     public String getTwentyMinPower() {
         JSONArray powerJsons = new JSONArray();
@@ -112,8 +148,12 @@ public class MonitorDataController {
         return powerJsons.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getRackBackPanel", notes = "获取机柜背面板信息")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜背面板信息", notes = "获取机柜背面板信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/back_panel", method = RequestMethod.GET)
     public String rackBackPanel() {
         JSONArray fangroupsJson = new JSONArray();
@@ -146,8 +186,12 @@ public class MonitorDataController {
     }
 
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getPowerDetail", notes = "获取电源详细信息")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取电源详细信息", notes = "获取电源详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/power_detail", method = RequestMethod.GET)
     public String powerDetail() {
         StringBuffer serverTargetName = new StringBuffer("system/power1/");
@@ -167,8 +211,12 @@ public class MonitorDataController {
         return JSONObject.toJSONString(power);
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getServerDetail", notes = "获取服务器基本信息")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取服务器基本信息", notes = "获取服务器基本信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
     public String serverDetail(@RequestParam("id") String servername) {
         StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
@@ -181,59 +229,35 @@ public class MonitorDataController {
         return JSONObject.toJSONString(server);
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getPowerEnergyComsuption", notes = "获取电源的能耗情况")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取电源的能耗情况", notes = "获取电源的能耗情况")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/comsumption", method = RequestMethod.GET)
     public String powerEnergyComsuption() {
         JSONObject jsonObject = new JSONObject();
         int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
 
-        int fansComsumption=propertyRepository.countSingleComsumptionStatics(1012,1051,timestamp);
+        int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
         jsonObject.put("fans", fansComsumption);
-        int serverComsumption=propertyRepository.countSingleComsumptionStatics(972,1011,timestamp);
+        int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
         jsonObject.put("servers", serverComsumption);
-        int psuComsumption=propertyRepository.countSingleComsumptionStatics(1053,1062,timestamp);
+        int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
         jsonObject.put("psus", psuComsumption);
 
-//        List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
-//        int psuPower = 0;
-//        for (Integer psuId : powerTargetIds) {
-//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//            for (Property property : powerPs) {
-//                psuPower += Integer.parseInt(property.getValue());
-//            }
-//        }
-//        jsonObject.put("psus", psuPower);
-//
-//        List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
-//        int fanPower = 0;
-//        for (Integer psuId : fanTargetIds) {
-//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//            for (Property property : powerPs) {
-//                fanPower += Integer.parseInt(property.getValue());
-//            }
-//        }
-//        jsonObject.put("fans", fanPower);
-//
-//        List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
-//        int serverPower = 0;
-//        for (Integer psuId : serverTargetIds) {
-//            List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//            for (Property property : powerPs) {
-//                serverPower += Integer.parseInt(property.getValue());
-//            }
-//        }
-//        jsonObject.put("servers", serverPower);
 
         jsonObject.put("total", fansComsumption + serverComsumption + psuComsumption);
         return jsonObject.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "getPowerEnergyComsuptions", notes = "获取过去三十分钟的能耗情况数据，共16组")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取过去三十分钟的能耗情况数据", notes = "获取过去三十分钟的能耗情况数据，共16组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/comsumptions", method = RequestMethod.GET)
     public String thirtyMinsComsuptions() {
         JSONArray comsumptionJsons = new JSONArray();
@@ -241,44 +265,12 @@ public class MonitorDataController {
         timestamps.forEach(timestamp -> {
             JSONObject jsonObject = new JSONObject();
 
-            int fansComsumption=propertyRepository.countSingleComsumptionStatics(1012,1051,timestamp);
+            int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
             jsonObject.put("fans", fansComsumption);
-            int serverComsumption=propertyRepository.countSingleComsumptionStatics(972,1011,timestamp);
+            int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
             jsonObject.put("servers", serverComsumption);
-            int psuComsumption=propertyRepository.countSingleComsumptionStatics(1053,1062,timestamp);
+            int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
             jsonObject.put("psus", psuComsumption);
-//            List<Integer> powerTargetIds = targetReposiroty.findPsuTargetIds();
-//            int psuPower = 0;
-//            for (Integer psuId : powerTargetIds) {
-//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//                for (Property property : powerPs) {
-//                    psuPower += Integer.parseInt(property.getValue());
-//                }
-//            }
-//            jsonObject.put("psus", psuPower);
-//
-//            List<Integer> fanTargetIds = targetReposiroty.findFanTargetIds();
-//            int fanPower = 0;
-//            for (Integer psuId : fanTargetIds) {
-//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//                for (Property property : powerPs) {
-//                    fanPower += Integer.parseInt(property.getValue());
-//                }
-//            }
-//            jsonObject.put("fans", fanPower);
-//
-//            List<Integer> serverTargetIds = targetReposiroty.findServerTargetIds();
-//            int serverPower = 0;
-//            for (Integer psuId : serverTargetIds) {
-//                List<Property> powerPs = propertyRepository.findAllByNameAndTimestampAndTargetid("Power", timestamp, psuId);
-//
-//                for (Property property : powerPs) {
-//                    serverPower += Integer.parseInt(property.getValue());
-//                }
-//            }
-//            jsonObject.put("servers", serverPower);
             jsonObject.put("timestamp", Utils.dateFommat(timestamp));
 
             comsumptionJsons.add(jsonObject);
@@ -287,8 +279,12 @@ public class MonitorDataController {
         return comsumptionJsons.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "/server_temps", notes = "获取服务器过去三十分钟的内外温度数据，共十六组")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取服务器过去三十分钟的内外温度数据", notes = "获取服务器过去三十分钟的内外温度数据，共十六组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/server_temps", method = RequestMethod.GET)
     public String serverTemps(@RequestParam("id") String serverName) {
         JSONArray tempsJson = new JSONArray();
@@ -313,8 +309,12 @@ public class MonitorDataController {
         return tempsJson.toJSONString();
     }
 
-    @CrossOrigin(origins = "*",maxAge = 3600)
-    @ApiOperation(value = "/server_comsumption", notes = "获取服务器过去三十分钟的能耗数据，共十六组")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取服务器过去三十分钟的能耗数据", notes = "获取服务器过去三十分钟的能耗数据，共十六组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
     @RequestMapping(value = "/server_comsumption", method = RequestMethod.GET)
     public String serverComsumption(@RequestParam("id") String serverName) {
         JSONArray tempsJson = new JSONArray();

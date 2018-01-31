@@ -10,7 +10,8 @@ public enum ResultStatus {
     USERNAME_OR_PASSWORD_ERROR(-1001, "用户名或密码错误"),
     USER_NOT_FOUND(-1002, "用户不存在"),
     USER_NOT_LOGIN(-1003, "用户未登录"),
-    NOT_AUTH(-1004,"用户未授权");
+    NOT_AUTH(-1004,"用户未授权"),
+    NOT_EXIST(-1005,"对象不存在");
 
     /**
      * 返回码

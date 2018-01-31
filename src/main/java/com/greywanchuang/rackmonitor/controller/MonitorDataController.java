@@ -11,7 +11,6 @@ import com.greywanchuang.rackmonitor.repository.PropertyRepository;
 import com.greywanchuang.rackmonitor.repository.RelationRepository;
 import com.greywanchuang.rackmonitor.repository.TargetReposiroty;
 import com.greywanchuang.rackmonitor.util.Utils;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,9 +21,8 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/v1")
+@RequestMapping(value = "/")
 public class MonitorDataController {
-
     @Autowired
     private PropertyRepository propertyRepository;
 
@@ -62,6 +60,7 @@ public class MonitorDataController {
         rack.compose(properties, rack);
         return JSONObject.toJSONString(rack);
     }
+
 
     @Authorization
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -149,6 +148,23 @@ public class MonitorDataController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取服务器基本信息", notes = "获取服务器基本信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
+    public String serverDetail(@RequestParam("id") String servername) {
+        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
+        serverTargetName.append(servername).append("/");
+        Target target = targetReposiroty.getByName(serverTargetName.toString());
+        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
+        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
+        Server server = new Server();
+        server.compose(properties);
+        return JSONObject.toJSONString(server);
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "获取机柜背面板信息", notes = "获取机柜背面板信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
@@ -211,23 +227,6 @@ public class MonitorDataController {
         return JSONObject.toJSONString(power);
     }
 
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取服务器基本信息", notes = "获取服务器基本信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
-    public String serverDetail(@RequestParam("id") String servername) {
-        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
-        serverTargetName.append(servername).append("/");
-        Target target = targetReposiroty.getByName(serverTargetName.toString());
-        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
-        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
-        Server server = new Server();
-        server.compose(properties);
-        return JSONObject.toJSONString(server);
-    }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "获取电源的能耗情况", notes = "获取电源的能耗情况")
@@ -335,12 +334,5 @@ public class MonitorDataController {
         });
 
         return tempsJson.toJSONString();
-    }
-
-    @RequestMapping(value = "help", method = RequestMethod.GET)
-    public String help() {
-        StringBuffer sb = new StringBuffer();
-
-        return sb.toString();
     }
 }

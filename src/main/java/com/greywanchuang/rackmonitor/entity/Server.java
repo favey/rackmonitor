@@ -1,16 +1,13 @@
 package com.greywanchuang.rackmonitor.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "server")
+@EqualsAndHashCode(of = {"id"})
 @Data
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
 public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +35,7 @@ public class Server {
     private int height;
 
     @Column
-    private double wright;
+    private double width;
 
     @Column
     private String ipmi;

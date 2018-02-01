@@ -2,7 +2,9 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
+import com.greywanchuang.rackmonitor.entity.Cabinet;
 import com.greywanchuang.rackmonitor.entity.Server;
+import com.greywanchuang.rackmonitor.repository.CabinetRepository;
 import com.greywanchuang.rackmonitor.repository.ServerRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -10,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 
@@ -20,6 +23,9 @@ public class ServerController {
     @Autowired
     private ServerRepository serverRepository;
 
+    @Autowired
+    private CabinetRepository cabinetRepository;
+
     @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "获取服务器信息", notes = "获取服务器信息")
     @ApiImplicitParams({
@@ -27,15 +33,13 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String serverInfo(@PathVariable int id)
-    {
-        Server server=serverRepository.findById(id);
-        if(server!=null) {
+    public String serverInfo(@PathVariable int id, HttpServletResponse rsp) {
+        Server server = serverRepository.findById(id);
+        if (server != null) {
             return JSONObject.toJSONString(server);
-        }
-        else
-        {
-            return "";
+        } else {
+            rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "Server not Exist!";
         }
     }
 
@@ -46,10 +50,40 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public String createServerInfo(@RequestBody Map<String,Object> reqMap)
-    {
+    public String createServerInfo(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+        Object cid = reqMap.get("cid");
+        if (cid == null) {
+            rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return "No cabinet!";
+        }
+        Cabinet cabinet = cabinetRepository.findById((Integer) cid);
+        if (cabinet == null) {
+            rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "Cabinet not exist!";
+        }
 
-        return "";
+        try {
+            Server server = new Server();
+            server.setLabel(reqMap.get("label").toString());
+            server.setCabinet(cabinet);
+            server.setDescription(reqMap.get("description").toString());
+            server.setHeight((Integer) reqMap.get("height"));
+            server.setWidth((Double) reqMap.get("width"));
+            server.setHostname(reqMap.get("hostname").toString());
+            server.setIp(reqMap.get("ip").toString());
+            server.setIpmi(reqMap.get("ipmi").toString());
+            server.setPosition((Integer) reqMap.get("position"));
+            server.setSerialNo(reqMap.get("serialNo").toString());
+            server.setUserName(reqMap.get("userName").toString());
+            server.setPassword(reqMap.get("password").toString());
+
+            serverRepository.save(server);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "Intenal error";
+        }
+        return "Sucess";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -59,9 +93,9 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String removeServerInfo(@RequestParam int id)
-    {
-        return "";
+    public String removeServerInfo(@PathVariable int id) {
+        serverRepository.removeById(id);
+        return "Success";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -70,9 +104,28 @@ public class ServerController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String editServerInfo(@RequestParam int id)
-    {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String editServerInfo(@PathVariable int id,@RequestBody Map<String, Object> reqMap) {
+        Server server=serverRepository.findById(id);
+        Object cid=reqMap.get("cid");
+        if(cid!=null && (Integer)cid!=server.getCabinet().getId() )
+        {
+            server.setCabinet(cabinetRepository.findById((Integer)cid));
+        }
+
+        server.setLabel(reqMap.get("label").toString());
+        server.setDescription(reqMap.get("description").toString());
+        server.setHeight((Integer) reqMap.get("height"));
+        server.setWidth((Double) reqMap.get("width"));
+        server.setHostname(reqMap.get("hostname").toString());
+        server.setIp(reqMap.get("ip").toString());
+        server.setIpmi(reqMap.get("ipmi").toString());
+        server.setPosition((Integer) reqMap.get("position"));
+        server.setSerialNo(reqMap.get("serialNo").toString());
+        server.setUserName(reqMap.get("userName").toString());
+        server.setPassword(reqMap.get("password").toString());
+
+        serverRepository.save(server);
         return "";
     }
 
@@ -82,9 +135,8 @@ public class ServerController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/reboot", method = RequestMethod.POST)
-    public String rebootServer(@RequestParam int id)
-    {
+    @RequestMapping(value = "/reboot/{id}", method = RequestMethod.POST)
+    public String rebootServer(@PathVariable int id) {
         return "";
     }
 
@@ -94,9 +146,8 @@ public class ServerController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/start", method = RequestMethod.POST)
-    public String startServer(@RequestParam int id)
-    {
+    @RequestMapping(value = "/start/{id{", method = RequestMethod.POST)
+    public String startServer(@PathVariable int id) {
         return "";
     }
 
@@ -107,8 +158,7 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/storage", method = RequestMethod.GET)
-    public String storageInfo()
-    {
+    public String storageInfo() {
         return "";
     }
 
@@ -119,8 +169,7 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/energe", method = RequestMethod.GET)
-    public String energeConsumption()
-    {
+    public String energeConsumption() {
         return "";
     }
 
@@ -131,8 +180,7 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/temp", method = RequestMethod.GET)
-    public String tempStatistics()
-    {
+    public String tempStatistics() {
         return "";
     }
 
@@ -143,8 +191,7 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/memory", method = RequestMethod.GET)
-    public String memoryStatistics()
-    {
+    public String memoryStatistics() {
         return "";
     }
 
@@ -155,8 +202,7 @@ public class ServerController {
     })
     @Authorization
     @RequestMapping(value = "/cpu", method = RequestMethod.GET)
-    public String cpusStatistics()
-    {
+    public String cpusStatistics() {
         return "";
     }
 

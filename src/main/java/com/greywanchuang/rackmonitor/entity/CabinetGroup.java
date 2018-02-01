@@ -1,5 +1,6 @@
 package com.greywanchuang.rackmonitor.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,8 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "cabinet_group")
 @Data
-@EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class CabinetGroup {
 
     @Id
@@ -24,7 +24,7 @@ public class CabinetGroup {
     private int position;
 
     @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "cabinetGroup")
+//    @JSONField(serialize = false)
     private Set<Cabinet> cabinets=new HashSet<>();
-
 
 }

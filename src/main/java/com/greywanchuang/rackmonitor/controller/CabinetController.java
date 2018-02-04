@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Path;
 import java.util.Map;
 
 @RestController
@@ -32,7 +33,7 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getCainet() {
         return "";
     }
@@ -44,9 +45,8 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
-    public String getCainetGroupList(@PathVariable int id)
-    {
-        CabinetGroup cabinetGroup=cabinetGroupRepository.findById(id);
+    public String getCainetGroupList(@PathVariable int id) {
+        CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         return JSONObject.toJSONString(cabinetGroup);
     }
 
@@ -57,8 +57,23 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/group", method = RequestMethod.PUT)
-    public String createCainetGroup(@RequestBody Map<String,Object> reqMap) {
-        CabinetGroup cabinetGroup=new CabinetGroup();
+    public String createCainetGroup(@RequestBody Map<String, Object> reqMap) {
+        CabinetGroup cabinetGroup = new CabinetGroup();
+        cabinetGroup.setLabel(reqMap.get("label").toString());
+        cabinetGroup.setPosition((Integer) reqMap.get("position"));
+        cabinetGroupRepository.save(cabinetGroup);
+        return "Sucess";
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "编辑机柜组", notes = "编辑机柜组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/group/{id}", method = RequestMethod.PUT)
+    public String editCainetGroup(@PathVariable int id, @RequestBody Map<String, Object> reqMap) {
+        CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         cabinetGroup.setLabel(reqMap.get("label").toString());
         cabinetGroup.setPosition((Integer) reqMap.get("position"));
         cabinetGroupRepository.save(cabinetGroup);
@@ -72,8 +87,7 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/group/{id}", method = RequestMethod.DELETE)
-    public String removeCainetGroupList(@PathVariable int id)
-    {
+    public String removeCainetGroupList(@PathVariable int id) {
         cabinetGroupRepository.deleteById(id);
         return "Sucess";
     }
@@ -85,17 +99,19 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public String createCainet(@RequestBody Map<String,Object> reqMap)
-    {
-        Object cgid=reqMap.get("cgid");
-        CabinetGroup cabinetGroup=cabinetGroupRepository.findById((Integer) cgid);
-        Cabinet cabinet=new Cabinet();
+    public String createCainet(@RequestBody Map<String, Object> reqMap) {
+        Object cgid = reqMap.get("cgid");
+        CabinetGroup cabinetGroup = cabinetGroupRepository.findById((Integer) cgid);
+        Cabinet cabinet = new Cabinet();
         cabinet.setCabinetGroup(cabinetGroup);
+
         cabinet.setTypeName(reqMap.get("type").toString());
         cabinet.setModelNumer(reqMap.get("model").toString());
         cabinet.setSerialNumber(reqMap.get("serialNo").toString());
         cabinet.setSmpAddres(reqMap.get("smp").toString());
         cabinet.setSpace((Integer) reqMap.get("space"));
+        cabinet.setLabel(reqMap.get("label").toString());
+        cabinet.setComputedPower((Double) reqMap.get("power"));
         cabinet.setWeight((Integer) reqMap.get("weight"));
         cabinet.setDoorSensorIP(reqMap.get("dsIP").toString());
 
@@ -110,9 +126,33 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String editCainet() {
-        return "";
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String editCainet(@PathVariable int id, @RequestBody Map<String, Object> reqMap) {
+        Cabinet cabinet = cabinetRepository.findById(id);
+        cabinet.setModelNumer(reqMap.get("model").toString());
+        cabinet.setSerialNumber(reqMap.get("serialNo").toString());
+        cabinet.setLabel(reqMap.get("label").toString());
+        cabinet.setComputedPower((Double) reqMap.get("power"));
+        cabinet.setWeight((Integer) reqMap.get("weight"));
+
+        cabinetRepository.save(cabinet);
+
+        return "Success";
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "移除机柜信息", notes = "移除机柜信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public String removeCainet(@PathVariable int id) {
+        Cabinet cabinet = cabinetRepository.findById(id);
+        cabinet.setStatus(1);
+        cabinetRepository.save(cabinet);
+
+        return "Success";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)

@@ -46,6 +46,12 @@ public class Server {
     @Column
     private String password;
 
+    /**
+     * 用于标记删除状态，0-正常，1-删除，但实际上并不删除
+     */
+    @Column
+    private int status=0;
+
     @JoinColumn(name = "cabinet_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Cabinet cabinet;

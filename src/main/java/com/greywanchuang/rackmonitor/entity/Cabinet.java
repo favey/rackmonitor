@@ -16,6 +16,9 @@ public class Cabinet {
     private int id;
 
     @Column
+    private  String label;
+
+    @Column
     private String groupName;
 
     @Column
@@ -35,6 +38,12 @@ public class Cabinet {
 
     @Column
     private int weight;
+
+    /**
+     * 用于标记删除状态，0-正常，1-删除，但实际上并不删除
+     */
+    @Column
+    private int status=0;
 
     @Column
     private double computedPower;

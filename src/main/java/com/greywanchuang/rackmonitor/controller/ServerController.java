@@ -94,7 +94,9 @@ public class ServerController {
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String removeServerInfo(@PathVariable int id) {
-        serverRepository.removeById(id);
+        Server server=serverRepository.findById(id);
+        server.setStatus(1);
+        serverRepository.save(server);
         return "Success";
     }
 

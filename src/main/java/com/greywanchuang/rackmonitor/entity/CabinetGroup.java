@@ -1,6 +1,5 @@
 package com.greywanchuang.rackmonitor.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.*;
 
 import javax.persistence.*;

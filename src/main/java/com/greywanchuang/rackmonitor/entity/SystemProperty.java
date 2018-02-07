@@ -1,12 +1,8 @@
 package com.greywanchuang.rackmonitor.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -14,7 +10,7 @@ import javax.persistence.Table;
 @Data
 public class SystemProperty {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private  int id;
 
     @Column

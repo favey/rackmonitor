@@ -1,0 +1,286 @@
+2.2.1	数据中心基本信息
+
+{
+	avgTemp:	,	// 数据中心平均温度
+		power:		,	// 数据中心当前能耗
+		rHumidity:	,	// 数据中心当前绝对湿度
+		compute:	,	// 数据中心计算能力
+		memeory:	,	// 数据中心内存容量
+		storage:	,	// 数据中心存储容量
+		space:		,	// 数据中心空间使用率
+		smoke:		,	// 数据中心烟雾预警情况
+		leaking:	,	// 数据中心水浸预警情况
+}
+
+2.2.2	数据中心PUE信息
+
+{
+	pue: 	// 当前PUE
+	history: {
+		// 过去7天的PUE统计信息（具体格式前端和系统层定义）
+	}
+}
+
+2.2.3	数据中心能耗统计
+
+{
+	power: {	// 当前数据中心内能耗统计，列出可获取的所有设备的当前能耗
+		server:		, 	// 服务器能耗
+		aircon:		,	// 空调能耗
+		fan:		,	// 风扇能耗
+		pdu:		,	// PDU能耗
+		others:		,	// 其它设备能耗（如有）
+	},
+	garph: {
+		// 饼状图的数据，和前端协商
+	}
+}
+
+2.3.1	查看所有机柜状态（平面视图）
+
+[
+	A: [	// 机柜组名称
+		cabinet: {
+			id:		, 	// 机柜ID，因为机柜有可能重名，在添加机柜时是否应该给
+			label:	,	// 机柜名称(label)
+			status:	,	// 机柜状态
+			temp:	, 	// 机柜温度
+			power:	,	// 机柜功耗
+		},
+		// .....
+	],
+	B: [
+		// ......
+	],
+	// ......
+]
+
+
+2.3.4	设置阀值（温度）
+
+{
+	health:		,	// 健康状态的温度阀值
+	risk:		,	// 危险状态的温度阀值
+}
+
+2.3.6	数据中心统计信息
+
+{
+	info: {
+		computedPower:	,	// 预估用电量
+		designMaxPower:	,	// 设计最大供电量
+		size:			,	// 面积
+	},
+	equipments: {
+		cabinets:		,	// 机柜数量
+		server:			,	// 服务器数量
+		pdu:			, 	// PUD数量
+		aircon:			,	// 空调数量
+		ups:			,	// UPS数量
+	},
+	power: {
+		upsLoad:		, 	// UPS负载
+		pduLoad:		, 	// PDU负载
+		pwSquare:		,	// 没单位面积用电
+	},
+	air: {
+		oversupply:		,	// 风量利用率（总）
+		util:			,	// 风量供给（总）
+		roomAir:		,	// 房间风量
+		airSupply:		, 	// 风量供给（总） 
+	}
+}
+
+2.3.7	查看机柜概况（平面视图）
+
+{
+	label:		,	// 机柜名称
+	power:		,	// 机柜当前用电量
+	temp:		,	// 机柜当前温度
+	humidity:	,	// 机柜当前湿度
+	door:		,	// 机柜门禁状态
+	fan:		,	// 风扇状态
+}
+
+2.3.9	添加机柜组
+
+{
+	label:		, 	// 机柜组名称
+	position:	,	// 机柜组位置
+}
+
+2.3.11	编辑机柜组名称
+
+{
+	label:		,	// 机柜组名称（新）
+}
+
+2.4.1	机柜基本信息
+
+{
+	totalPower:		,	// 机柜当前总能耗
+	usage:			,	// 机柜当前使用率
+	door:			,	// 机柜当前的门禁状态
+	fan:			,	// 机柜当前的风扇状态
+	weight:			,	// 机柜的重量
+	tCurrent:		,	// 机柜的总电流
+	humidity:		,	// 机柜的湿度
+	leaking:		,	// 机柜的水浸状态
+	smoke:			,	// 机柜的烟雾状态
+	temp: {				// 机柜的温度
+	top:		,		// 顶部温度
+	middle:		,		// 中部温度
+	bottom:		,		// 底部温度
+		average:	,		// 平均温度
+		btu:		,		// BTU
+	},
+	info: {
+		model:		,		// 型号
+		sn:			,		// 序列号
+		firmware:	,		// 固件型号
+		ip:			,		// IP地址
+		mac:		,		// MAC地址
+		mask:		,		// Net Mask地址
+	}
+}
+
+2.4.4	机柜PSU基本信息（A-Rack类型机柜独有）
+
+{
+	status:		, 	// 运行状态
+	health:		,	// 健康状态
+	input:		, 	// 当前输入功率
+	output:		,	// 当前输出功率
+	efficiency:	,	// 当前电源功效
+	maxPower:	,	// 最大支持功率
+	mount:		,	// 已挂载的电源数量
+	mode:		,	// 控制模式
+	firmware:	,	// 固件版本
+}
+
+2.4.5	机柜PSU中电源模块信息（A-RACK类型机柜独有）
+
+[
+	psu#0: {	// 电源模块名称
+		status:		,	// 状态
+		voltage:	,	// 电压
+		current:	,	// 电流
+	},
+	// ......
+]
+
+2.4.7	机柜风扇墙视图（A-Rack类型机柜独有）
+
+{
+	type: 	,	// 机柜类型
+	fanwall: [
+		#4: {	// 风扇组编号/名称
+			status:		,	// 状态
+		},
+		// ......
+	]
+}
+
+2.4.8	机柜风扇墙信息（A-Rack类型机柜独有）
+
+[
+	fw0: {			// 风扇墙名称/编号
+		status:	,	// 风扇墙状态
+		power:	,	// 风扇墙当前能耗
+		fans: [
+			0: {				// 风扇编号
+				status:		, 	// 风扇状态
+				rpm:		,	// 风扇当前转速
+			}，
+			// ......
+		]
+	}，
+	// ......
+]
+
+2.5.1	机柜组列表
+
+[
+	{
+		label:	,	// 机柜组名称
+		id:		, 	// 机柜组iD
+	},
+	// ......
+]
+
+2.5.2	机柜类型
+
+[
+	{
+		label:	,	// 机柜类型名称
+		id:		,	// 机柜类型ID
+	}
+]
+
+2.5.1	添加机柜
+
+{
+	label:			,	// 机柜名称
+	group:			,	// 机柜组ID
+	type:			,	// 机柜类型ID
+	model:			,	// 型号
+	sn:				, 	// 序列号
+	space:			,	// 空间
+	weight:			,	// 重量
+	computedPower:	,	// 预计能耗
+	sensor: {
+		door:		,	// 门禁IP地址
+	},
+	smp: {
+		ip:				// SMP配置相关，只有A-Rack AIM类型的机柜有该配置
+	}
+}
+
+2.5.5	编辑机柜信息
+
+{
+	label:			,	// 机柜名称
+	group:			,	// 机柜组ID
+	type:			,	// 机柜类型ID
+	model:			,	// 型号
+	sn:				, 	// 序列号
+	space:			,	// 空间
+	weight:			,	// 重量
+	computedPower:	,	// 预计能耗
+}
+
+2.5.6	编辑机柜SMP配置（A-Rack类型机柜独有）
+
+{
+	ip:		,	// SMP配置（IP地址）
+}
+
+2.6.1	服务器基本信息
+
+{
+	label:			,	// 服务器名称
+	status:			,	// 运行状态
+	description:	,	// 描述
+	location:		,	// 所处位置
+	client:			,	// 拥有者，默认为管理员
+	model:			,	// 型号
+	sn:				,	// 序列号
+	bmc: {
+		reset:		,	// BMC Reset状态
+	},
+	net: {
+		ip:			,	// IP地址
+		hostname:	,	// Hostname
+		mac:		,	// Mac地址
+		mask:		,	// 掩码
+		gateway:	,	// 网管
+	},
+	compute:		,	// 计算能力
+	memeory:		,	// 内存总量
+	storage:		,	// 存储总量
+	intTemp:		,	// 内部温度
+	extTemp:		,	// 外部温度
+	power:			,	// 能耗
+}
+
+

@@ -5,7 +5,7 @@ package com.greywanchuang.rackmonitor.util;
  * @author ScienJus
  * @date 2015/7/31.
  */
-public class Constants {
+public final class Constants {
 
     /**
      * 存储当前登录用户id的字段名
@@ -22,4 +22,10 @@ public class Constants {
      */
     public static final String AUTHORIZATION = "Authorization";
 
+    enum DATE_RANGE
+    {
+        WEEK,
+        HALF_MONTH,
+        MONTH;
+    }
 }

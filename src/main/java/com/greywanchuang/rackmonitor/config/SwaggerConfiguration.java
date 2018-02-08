@@ -27,7 +27,7 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title("DCSV API v1.0")
                 .description("格雷皖创Smashmonitor API 接口文档" )
-                .termsOfServiceUrl("http://iot.10086.com/")
+                .termsOfServiceUrl("http://www.greatcreative.com/")
                 .version("1.0.0")
                 .build();
     }

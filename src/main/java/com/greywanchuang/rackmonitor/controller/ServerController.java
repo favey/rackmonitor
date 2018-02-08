@@ -148,7 +148,7 @@ public class ServerController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/start/{id{", method = RequestMethod.POST)
+    @RequestMapping(value = "/start/{id}", method = RequestMethod.POST)
     public String startServer(@PathVariable int id) {
         return "";
     }

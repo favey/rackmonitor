@@ -28,7 +28,7 @@ public class CabinetController {
     private CabinetGroupRepository cabinetGroupRepository;
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取机柜信息", notes = "获取机柜信息")
+    @ApiOperation(value = "获取机柜概况信息(平面图)", notes = "获取机柜概况信息(平面图)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })

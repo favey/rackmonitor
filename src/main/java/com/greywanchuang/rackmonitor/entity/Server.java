@@ -35,7 +35,7 @@ public class Server {
     private int height;
 
     @Column
-    private double width;
+    private double weight;
 
     @Column
     private String ipmi;

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Path;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -83,15 +84,27 @@ public class CabinetController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取机柜组信息", notes = "获取机柜组信息")
+    @ApiOperation(value = "获取指定机柜组信息", notes = "获取指定机柜组信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
     @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
-    public String getCainetGroupList(@PathVariable int id) {
+    public String getCainetGroup(@PathVariable int id) {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         return JSONObject.toJSONString(cabinetGroup);
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜组列表信息", notes = "获取机柜组列表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/group_list", method = RequestMethod.GET)
+    public String getCainetGroupList() {
+        List<CabinetGroup> cabinetGroupList=cabinetGroupRepository.findAll();
+        return JSONObject.toJSONString(cabinetGroupList);
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -182,6 +195,29 @@ public class CabinetController {
         cabinetRepository.save(cabinet);
 
         return "Success";
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜PSU信息", notes = "获取机柜PSU信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/psu/{id}", method = RequestMethod.GET)
+    public String getCabinetPSUInfo(@PathVariable int id)
+    {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("status","N/A");
+        jsonObject.put("health","N/A");
+        jsonObject.put("input","N/A");
+        jsonObject.put("output","N/A");
+        jsonObject.put("efficiency","N/A");
+        jsonObject.put("maxPower","N/A");
+        jsonObject.put("mount",0);
+        jsonObject.put("mode","N/A");
+        jsonObject.put("firmware","N/A");
+
+        return jsonObject.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)

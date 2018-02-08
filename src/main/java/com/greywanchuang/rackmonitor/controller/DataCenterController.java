@@ -40,6 +40,7 @@ public class DataCenterController {
         jsonObject.put("compute", "1200 Ghz");
         jsonObject.put("memory", "800TB");
         jsonObject.put("storage", "500 PB");
+        jsonObject.put("space","28%");
         jsonObject.put("smoke", "Critical");
         jsonObject.put("leaking", "Normal");
         return jsonObject.toJSONString();
@@ -99,7 +100,8 @@ public class DataCenterController {
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("server","1200 KW");
         jsonObject.put("aircon","1000 KW");
-        jsonObject.put("PDU","500 KW");
+        jsonObject.put("pdu","500 KW");
+        jsonObject.put("fan","5 KW");
         jsonObject.put("others","10 KW");
 
         JSONObject json=new JSONObject();

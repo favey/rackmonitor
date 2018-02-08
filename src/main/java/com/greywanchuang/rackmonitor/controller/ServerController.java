@@ -35,12 +35,39 @@ public class ServerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String serverInfo(@PathVariable int id, HttpServletResponse rsp) {
         Server server = serverRepository.findById(id);
-        if (server != null) {
-            return JSONObject.toJSONString(server);
-        } else {
+        if (server == null) {
             rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return "Server not Exist!";
         }
+
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("label",server.getLabel());
+        jsonObject.put("status","N/A");
+        jsonObject.put("description",server.getDescription());
+        jsonObject.put("location","China");
+        jsonObject.put("client","admin");
+        jsonObject.put("model","N/A");
+        jsonObject.put("sn",server.getSerialNo());
+        jsonObject.put("compute","N/A");
+        jsonObject.put("memeory","N/A");
+        jsonObject.put("storage","N/A");
+        jsonObject.put("intTemp","N/A");
+        jsonObject.put("extTemp","N/A");
+        jsonObject.put("power","N/A");
+
+        JSONObject netJson=new JSONObject();
+        netJson.put("ip",server.getIp());
+        netJson.put("hostname",server.getHostname());
+        netJson.put("mac","N/A");
+        netJson.put("mask","255.255.255.0");
+        netJson.put("gateway","N/A");
+        jsonObject.put("net",netJson);
+
+        JSONObject bmcJson=new JSONObject();
+        bmcJson.put("reset","N/A");
+        jsonObject.put("bmc",bmcJson);
+
+        return jsonObject.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -68,7 +95,7 @@ public class ServerController {
             server.setCabinet(cabinet);
             server.setDescription(reqMap.get("description").toString());
             server.setHeight((Integer) reqMap.get("height"));
-            server.setWidth((Double) reqMap.get("width"));
+            server.setWeight((Double) reqMap.get("weight"));
             server.setHostname(reqMap.get("hostname").toString());
             server.setIp(reqMap.get("ip").toString());
             server.setIpmi(reqMap.get("ipmi").toString());
@@ -118,7 +145,7 @@ public class ServerController {
         server.setLabel(reqMap.get("label").toString());
         server.setDescription(reqMap.get("description").toString());
         server.setHeight((Integer) reqMap.get("height"));
-        server.setWidth((Double) reqMap.get("width"));
+        server.setWeight((Double) reqMap.get("weight"));
         server.setHostname(reqMap.get("hostname").toString());
         server.setIp(reqMap.get("ip").toString());
         server.setIpmi(reqMap.get("ipmi").toString());

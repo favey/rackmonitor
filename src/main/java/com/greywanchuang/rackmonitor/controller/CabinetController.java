@@ -33,9 +33,53 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getCainet() {
-        return "";
+    @RequestMapping(value = "/plane_view/{id}", method = RequestMethod.GET)
+    public String getCainetPlaneView(@PathVariable int id) {
+        Cabinet cabinet=cabinetRepository.findById(id);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("label",cabinet.getLabel());
+        jsonObject.put("power","1200 KW");
+        jsonObject.put("temp","40 C");
+        jsonObject.put("humidity","Normal");
+        jsonObject.put("door","N/A");
+        jsonObject.put("fan","Normal");
+        return jsonObject.toJSONString();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜基本信息", notes = "获取机柜基本信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header")})
+    @Authorization
+    @RequestMapping(value = "/basic_info/{id}", method = RequestMethod.GET)
+    public String getCainetBasicInfo(@PathVariable int id) {
+        Cabinet cabinet=cabinetRepository.findById(id);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("totalPower","1200 KW");
+        jsonObject.put("usage","20%");
+        jsonObject.put("weight",cabinet.getWeight());
+        jsonObject.put("humidity","Normal");
+        jsonObject.put("door","N/A");
+        jsonObject.put("fan","Normal");
+        jsonObject.put("tCurrent","10 A");
+        jsonObject.put("leaking","Normal");
+        jsonObject.put("smoke","Normal");
+        JSONObject tempJson=new JSONObject();
+        tempJson.put("top","N/A");
+        tempJson.put("middle","N/A");
+        tempJson.put("bottom","N/A");
+        tempJson.put("average","N/A");
+        tempJson.put("btu","N/A");
+        jsonObject.put("temp",tempJson);
+
+        JSONObject infoJson=new JSONObject();
+        infoJson.put("model",cabinet.getModelNumer());
+        infoJson.put("sn",cabinet.getSerialNumber());
+        infoJson.put("firmware","N/A");
+        infoJson.put("mac","N/A");
+        infoJson.put("netmask","N/A");
+        jsonObject.put("info",infoJson);
+
+        return jsonObject.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -71,7 +115,7 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/group/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/group/{id}", method = RequestMethod.POST)
     public String editCainetGroup(@PathVariable int id, @RequestBody Map<String, Object> reqMap) {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         cabinetGroup.setLabel(reqMap.get("label").toString());

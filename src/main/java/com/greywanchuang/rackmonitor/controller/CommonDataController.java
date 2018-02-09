@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.entity.SystemProperty;
 import com.greywanchuang.rackmonitor.repository.SystemPropertyRepository;
+import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -75,7 +76,7 @@ public class CommonDataController {
     public String getComputeCapability() {
 
         JSONObject json = new JSONObject();
-        json.put("cp", "1223 Ghz");
+        json.put("cp", "1223");
         return json.toJSONString();
     }
 
@@ -89,7 +90,7 @@ public class CommonDataController {
     public String getTotalMemory() {
 
         JSONObject json = new JSONObject();
-        json.put("memory", "1230 TB");
+        json.put("memory", "1230");
         return json.toJSONString();
     }
 
@@ -102,7 +103,7 @@ public class CommonDataController {
     @RequestMapping(value = "/storage", method = RequestMethod.GET)
     public String getTotalStorage() {
         JSONObject json = new JSONObject();
-        json.put("storae", "2000 PB");
+        json.put("storae", "2000");
         return json.toJSONString();
     }
 
@@ -176,7 +177,7 @@ public class CommonDataController {
     public String editPUEThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
         if (reqMap.size() != 4) {
             reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "Need 4 parameters!";
+            return Utils.error("Need 4 parameters!");
         }
 
         List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("pue_%");
@@ -227,7 +228,7 @@ public class CommonDataController {
             }
         });
 
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -239,6 +240,46 @@ public class CommonDataController {
     @RequestMapping(value = "/temp_threshold", method = RequestMethod.GET)
     public String getTempThreshold() {
         List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("temp_%");
+        JSONObject jsonObject = new JSONObject();
+        systemProperties.forEach((SystemProperty systemProperty) -> {
+            jsonObject.put(systemProperty.getProp(), systemProperty.getVal());
+        });
+        return jsonObject.toJSONString();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "编辑能耗阈值", notes = "编辑能耗阈值")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/power_threshold", method = RequestMethod.POST)
+    public String editPowerThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
+        if (reqMap.size() != 4) {
+            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return Utils.error("Need 4 parameters!");
+        }
+
+        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("power_%");
+        systemProperties.forEach(systemProperty -> {
+            if (reqMap.keySet().contains(systemProperty.getProp())) {
+                systemProperty.setVal(reqMap.get(systemProperty.getProp()).toString());
+                systemPropertyRepository.save(systemProperty);
+            }
+        });
+
+        return Utils.success();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取能耗阈值", notes = "获取能耗阈值")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/power_threshold", method = RequestMethod.GET)
+    public String getPowerThreshold() {
+        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("power_%");
         JSONObject jsonObject = new JSONObject();
         systemProperties.forEach((SystemProperty systemProperty) -> {
             jsonObject.put(systemProperty.getProp(), systemProperty.getVal());

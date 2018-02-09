@@ -8,6 +8,7 @@ import com.greywanchuang.rackmonitor.entity.Cabinet;
 import com.greywanchuang.rackmonitor.entity.CabinetGroup;
 import com.greywanchuang.rackmonitor.repository.CabinetGroupRepository;
 import com.greywanchuang.rackmonitor.repository.CabinetRepository;
+import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -119,7 +120,7 @@ public class CabinetController {
         cabinetGroup.setLabel(reqMap.get("label").toString());
         cabinetGroup.setPosition((Integer) reqMap.get("position"));
         cabinetGroupRepository.save(cabinetGroup);
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -134,7 +135,7 @@ public class CabinetController {
         cabinetGroup.setLabel(reqMap.get("label").toString());
         cabinetGroup.setPosition((Integer) reqMap.get("position"));
         cabinetGroupRepository.save(cabinetGroup);
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -146,7 +147,7 @@ public class CabinetController {
     @RequestMapping(value = "/group/{id}", method = RequestMethod.DELETE)
     public String removeCainetGroupList(@PathVariable int id) {
         cabinetGroupRepository.deleteById(id);
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -174,7 +175,7 @@ public class CabinetController {
 
         cabinetRepository.save(cabinet);
 
-        return "Success";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -194,7 +195,7 @@ public class CabinetController {
 
         cabinetRepository.save(cabinet);
 
-        return "Success";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -232,7 +233,7 @@ public class CabinetController {
         cabinet.setStatus(1);
         cabinetRepository.save(cabinet);
 
-        return "Success";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)

@@ -1,5 +1,7 @@
 package com.greywanchuang.rackmonitor.util;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,8 +26,24 @@ public final class Utils {
         return new SimpleDateFormat( "yyyy-MM-dd ").format(cal.getTime());
     }
 
-    public static void main(String[] args) {
-        System.out.println(getPreDate(-2));
+
+    /**
+     * 用于返回成功标识的json数据
+     * @return
+     */
+    public final static String success()
+    {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("message","success");
+        return jsonObject.toJSONString();
     }
+
+    public final static String error(String msg)
+    {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("message",msg);
+        return jsonObject.toJSONString();
+    }
+
 
 }

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 
 @RestController
@@ -34,12 +33,12 @@ public class DataCenterController {
     @RequestMapping(value = "/dc_basic_info", method = RequestMethod.GET)
     public String getBasicInfo() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("avgTemp", "50 C");
-        jsonObject.put("power", "1240 kw");
+        jsonObject.put("avgTemp", "50");
+        jsonObject.put("power", "1240");
         jsonObject.put("rHumidity", "58%");
-        jsonObject.put("compute", "1200 Ghz");
-        jsonObject.put("memory", "800TB");
-        jsonObject.put("storage", "500 PB");
+        jsonObject.put("compute", "1200");
+        jsonObject.put("memory", "800");
+        jsonObject.put("storage", "500");
         jsonObject.put("space","28%");
         jsonObject.put("smoke", "Critical");
         jsonObject.put("leaking", "Normal");
@@ -98,11 +97,11 @@ public class DataCenterController {
     public String getDCECStatistics()
     {
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("server","1200 KW");
-        jsonObject.put("aircon","1000 KW");
-        jsonObject.put("pdu","500 KW");
-        jsonObject.put("fan","5 KW");
-        jsonObject.put("others","10 KW");
+        jsonObject.put("server","1200");
+        jsonObject.put("aircon","1000");
+        jsonObject.put("pdu","500");
+        jsonObject.put("fan","5");
+        jsonObject.put("others","10");
 
         JSONObject json=new JSONObject();
         json.put("power",jsonObject);
@@ -122,8 +121,8 @@ public class DataCenterController {
         JSONObject jsonObject=new JSONObject();
 
         JSONObject infoJson=new JSONObject();
-        infoJson.put("computedPower","1200 KW");   // 预估用电量
-        infoJson.put("designMaxPower","2000 KW");  // 设计最大供电
+        infoJson.put("computedPower","1200");   // 预估用电量
+        infoJson.put("designMaxPower","2000");  // 设计最大供电
         infoJson.put("size","1200");    // 面积
         jsonObject.put("info",infoJson);
 
@@ -136,9 +135,9 @@ public class DataCenterController {
         jsonObject.put("equipments",equipmentsJson);
 
         JSONObject powerJson=new JSONObject();
-        powerJson.put("upsLoad","10 KW");
-        powerJson.put("pduLoad","8 KW");
-        powerJson.put("pwSquare","2 KW");
+        powerJson.put("upsLoad","10");
+        powerJson.put("pduLoad","8");
+        powerJson.put("pwSquare","2");
         jsonObject.put("power",powerJson);
 
         JSONObject airJson=new JSONObject();

@@ -22,6 +22,9 @@ public class Cabinet {
     private String groupName;
 
     @Column
+    private String type;
+
+    @Column
     private String typeName;
 
     @Column

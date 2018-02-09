@@ -6,6 +6,7 @@ import com.greywanchuang.rackmonitor.entity.Cabinet;
 import com.greywanchuang.rackmonitor.entity.Server;
 import com.greywanchuang.rackmonitor.repository.CabinetRepository;
 import com.greywanchuang.rackmonitor.repository.ServerRepository;
+import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -81,12 +82,12 @@ public class ServerController {
         Object cid = reqMap.get("cid");
         if (cid == null) {
             rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "No cabinet!";
+            return Utils.error("No cabinet!");
         }
         Cabinet cabinet = cabinetRepository.findById((Integer) cid);
         if (cabinet == null) {
             rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return "Cabinet not exist!";
+            return Utils.error("Cabinet not exist!");
         }
 
         try {
@@ -108,9 +109,9 @@ public class ServerController {
         } catch (Exception ex) {
             ex.printStackTrace();
             rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return "Intenal error";
+            return Utils.error("Intenal error");
         }
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -124,7 +125,7 @@ public class ServerController {
         Server server=serverRepository.findById(id);
         server.setStatus(1);
         serverRepository.save(server);
-        return "Success";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -155,7 +156,7 @@ public class ServerController {
         server.setPassword(reqMap.get("password").toString());
 
         serverRepository.save(server);
-        return "";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)

@@ -3,12 +3,9 @@ package com.greywanchuang.rackmonitor.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
-import com.greywanchuang.rackmonitor.domain.*;
-import com.greywanchuang.rackmonitor.entity.Property;
 import com.greywanchuang.rackmonitor.entity.Target;
 import com.greywanchuang.rackmonitor.repository.PropertyRepository;
 import com.greywanchuang.rackmonitor.repository.TargetReposiroty;
-import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -118,11 +115,11 @@ public class MonitorDataController {
         List<Integer> timestamps = propertyRepository.findNewstTimstamp(11);
         Target target = targetReposiroty.getByName("system/power1/");
         timestamps.forEach(timstamp -> {
-            List<Property> propertyList = propertyRepository.findAllByTimestampAndTargetid(timstamp, target.getId());
-            PowerComsumption powerComsumption = new PowerComsumption();
-            powerComsumption.compose(propertyList);
-            powerComsumption.setTimestamp(Utils.dateFommat(timstamp));
-            powerJsons.add(powerComsumption);
+//            List<Property> propertyList = propertyRepository.findAllByTimestampAndTargetid(timstamp, target.getId());
+//            PowerComsumption powerComsumption = new PowerComsumption();
+//            powerComsumption.compose(propertyList);
+//            powerComsumption.setTimestamp(Utils.dateFommat(timstamp));
+//            powerJsons.add(powerComsumption);
         });
 
         return powerJsons.toJSONString();
@@ -135,14 +132,15 @@ public class MonitorDataController {
     })
     @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
     public String serverDetail(@RequestParam("id") String servername) {
-        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
-        serverTargetName.append(servername).append("/");
-        Target target = targetReposiroty.getByName(serverTargetName.toString());
-        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
-        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
-        Server server = new Server();
-        server.compose(properties);
-        return JSONObject.toJSONString(server);
+//        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
+//        serverTargetName.append(servername).append("/");
+//        Target target = targetReposiroty.getByName(serverTargetName.toString());
+//        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
+//        List<Property> properties = propertyRepository.findAllByTimestampAndTargetid(timestamp, target.getId());
+//        Server server = new Server();
+//        server.compose(properties);
+//        return JSONObject.toJSONString(server);
+        return "";
     }
 
 //    @CrossOrigin(origins = "*", maxAge = 3600)
@@ -219,19 +217,21 @@ public class MonitorDataController {
     @Authorization
     @RequestMapping(value = "/comsumption", method = RequestMethod.GET)
     public String powerEnergyComsuption() {
-        JSONObject jsonObject = new JSONObject();
-        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
+//        JSONObject jsonObject = new JSONObject();
+//        int timestamp = propertyRepository.findNewstTimstamp(1).get(0);
+//
+//        int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
+//        jsonObject.put("fans", fansComsumption);
+//        int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
+//        jsonObject.put("servers", serverComsumption);
+//        int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
+//        jsonObject.put("psus", psuComsumption);
+//
+//
+//        jsonObject.put("total", fansComsumption + serverComsumption + psuComsumption);
+//        return jsonObject.toJSONString();
 
-        int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
-        jsonObject.put("fans", fansComsumption);
-        int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
-        jsonObject.put("servers", serverComsumption);
-        int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
-        jsonObject.put("psus", psuComsumption);
-
-
-        jsonObject.put("total", fansComsumption + serverComsumption + psuComsumption);
-        return jsonObject.toJSONString();
+        return "";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -242,23 +242,25 @@ public class MonitorDataController {
     @Authorization
     @RequestMapping(value = "/comsumptions", method = RequestMethod.GET)
     public String thirtyMinsComsuptions() {
-        JSONArray comsumptionJsons = new JSONArray();
-        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
-        timestamps.forEach(timestamp -> {
-            JSONObject jsonObject = new JSONObject();
+//        JSONArray comsumptionJsons = new JSONArray();
+//        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
+//        timestamps.forEach(timestamp -> {
+//            JSONObject jsonObject = new JSONObject();
+//
+//            int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
+//            jsonObject.put("fans", fansComsumption);
+//            int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
+//            jsonObject.put("servers", serverComsumption);
+//            int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
+//            jsonObject.put("psus", psuComsumption);
+//            jsonObject.put("timestamp", Utils.dateFommat(timestamp));
+//
+//            comsumptionJsons.add(jsonObject);
+//        });
+//
+//        return comsumptionJsons.toJSONString();
 
-            int fansComsumption = propertyRepository.countSingleComsumptionStatics(1012, 1051, timestamp);
-            jsonObject.put("fans", fansComsumption);
-            int serverComsumption = propertyRepository.countSingleComsumptionStatics(972, 1011, timestamp);
-            jsonObject.put("servers", serverComsumption);
-            int psuComsumption = propertyRepository.countSingleComsumptionStatics(1053, 1062, timestamp);
-            jsonObject.put("psus", psuComsumption);
-            jsonObject.put("timestamp", Utils.dateFommat(timestamp));
-
-            comsumptionJsons.add(jsonObject);
-        });
-
-        return comsumptionJsons.toJSONString();
+        return "";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -269,26 +271,28 @@ public class MonitorDataController {
     @Authorization
     @RequestMapping(value = "/server_temps", method = RequestMethod.GET)
     public String serverTemps(@RequestParam("id") String serverName) {
-        JSONArray tempsJson = new JSONArray();
-        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
-        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
-        serverTargetName.append(serverName).append("/");
-        Target target = targetReposiroty.getByName(serverTargetName.toString());
-        timestamps.forEach(timestamp -> {
-            JSONObject json = new JSONObject();
-            List<Property> tempsList = propertyRepository.findPowerTemps(timestamp, target.getId());
-            tempsList.forEach(property -> {
-                if ("ExTemp".equals(property.getName())) {
-                    json.put("extemp", property.getValue());
-                } else {
-                    json.put("entemp", property.getValue());
-                }
-            });
-            json.put("timestamp", Utils.dateFommat(timestamp));
-            tempsJson.add(json);
-        });
+//        JSONArray tempsJson = new JSONArray();
+//        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
+//        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
+//        serverTargetName.append(serverName).append("/");
+//        Target target = targetReposiroty.getByName(serverTargetName.toString());
+//        timestamps.forEach(timestamp -> {
+//            JSONObject json = new JSONObject();
+//            List<Property> tempsList = propertyRepository.findPowerTemps(timestamp, target.getId());
+//            tempsList.forEach(property -> {
+//                if ("ExTemp".equals(property.getName())) {
+//                    json.put("extemp", property.getValue());
+//                } else {
+//                    json.put("entemp", property.getValue());
+//                }
+//            });
+//            json.put("timestamp", Utils.dateFommat(timestamp));
+//            tempsJson.add(json);
+//        });
+//
+//        return tempsJson.toJSONString();
 
-        return tempsJson.toJSONString();
+        return "";
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -299,23 +303,25 @@ public class MonitorDataController {
     @Authorization
     @RequestMapping(value = "/server_comsumption", method = RequestMethod.GET)
     public String serverComsumption(@RequestParam("id") String serverName) {
-        JSONArray tempsJson = new JSONArray();
-        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
-        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
-        serverTargetName.append(serverName).append("/");
-        Target target = targetReposiroty.getByName(serverTargetName.toString());
-        timestamps.forEach(timestamp -> {
-            JSONObject json = new JSONObject();
-            System.out.println("targetid: " + target.getId() + "   timestamp: " + timestamp);
-            Property property = propertyRepository.findByTargetidAndNameAndTimestamp(target.getId(), "Power", timestamp);
-            if (property == null) {
-                return;
-            }
-            json.put("power", property.getValue());
-            json.put("timestamp", Utils.dateFommat(timestamp));
-            tempsJson.add(json);
-        });
+//        JSONArray tempsJson = new JSONArray();
+//        List<Integer> timestamps = propertyRepository.findNewstTimstamp(16);
+//        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
+//        serverTargetName.append(serverName).append("/");
+//        Target target = targetReposiroty.getByName(serverTargetName.toString());
+//        timestamps.forEach(timestamp -> {
+//            JSONObject json = new JSONObject();
+//            System.out.println("targetid: " + target.getId() + "   timestamp: " + timestamp);
+//            Property property = propertyRepository.findByTargetidAndNameAndTimestamp(target.getId(), "Power", timestamp);
+//            if (property == null) {
+//                return;
+//            }
+//            json.put("power", property.getValue());
+//            json.put("timestamp", Utils.dateFommat(timestamp));
+//            tempsJson.add(json);
+//        });
+//
+//        return tempsJson.toJSONString();
 
-        return tempsJson.toJSONString();
+        return "";
     }
 }

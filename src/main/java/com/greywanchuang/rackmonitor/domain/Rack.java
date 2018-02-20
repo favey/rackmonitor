@@ -103,29 +103,29 @@ public class Rack {
      * @return
      */
     public Rack compose(List<Property> properties,Rack rack ) {
-        properties.forEach(property -> {
-            if ("Manufacturer".equals(property.getName()) || "PartNumber".equals(property.getName())) {
-                rack.getModel().append(property.getValue());
-            } else if ("Location".equals(property.getName())) {
-                rack.setLocation(property.getValue());
-            } else if ("Health".equals(property.getName())) {
-                rack.setHealth(property.getValue());
-            } else if ("SN".equals(property.getName())) {
-                rack.setSn(property.getValue());
-            } else if ("EnTemp".equals(property.getName())) {
-                rack.setEntemp(Integer.parseInt(property.getValue()));
-            } else if ("IP".equals(property.getName())) {
-                rack.setIp(property.getValue());
-            } else if ("IPMode".equals(property.getName())) {
-                rack.setIpmode(property.getValue());
-            } else if ("NetMask".equals(property.getName())) {
-                rack.setNetmask(property.getValue());
-            } else if ("Firmware".equals(property.getName())) {
-                rack.setFirmware(property.getValue());
-            } else if ("MAC".equals(property.getName())) {
-                rack.setMac(property.getValue());
-            }
-        });
+//        properties.forEach(property -> {
+//            if ("Manufacturer".equals(property.getName()) || "PartNumber".equals(property.getName())) {
+//                rack.getModel().append(property.getValue());
+//            } else if ("Location".equals(property.getName())) {
+//                rack.setLocation(property.getValue());
+//            } else if ("Health".equals(property.getName())) {
+//                rack.setHealth(property.getValue());
+//            } else if ("SN".equals(property.getName())) {
+//                rack.setSn(property.getValue());
+//            } else if ("EnTemp".equals(property.getName())) {
+//                rack.setEntemp(Integer.parseInt(property.getValue()));
+//            } else if ("IP".equals(property.getName())) {
+//                rack.setIp(property.getValue());
+//            } else if ("IPMode".equals(property.getName())) {
+//                rack.setIpmode(property.getValue());
+//            } else if ("NetMask".equals(property.getName())) {
+//                rack.setNetmask(property.getValue());
+//            } else if ("Firmware".equals(property.getName())) {
+//                rack.setFirmware(property.getValue());
+//            } else if ("MAC".equals(property.getName())) {
+//                rack.setMac(property.getValue());
+//            }
+//        });
         return rack;
     }
 

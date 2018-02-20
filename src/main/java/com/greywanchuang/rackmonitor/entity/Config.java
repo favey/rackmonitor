@@ -2,10 +2,9 @@ package com.greywanchuang.rackmonitor.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -33,4 +32,8 @@ public class Config {
 
     @Column
     private int deviceId;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "config")
+    @org.hibernate.annotations.ForeignKey(name = "none")
+    private Set<Property> properties = new HashSet<>();
 }

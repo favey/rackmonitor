@@ -43,14 +43,14 @@ public class PowerComsumption {
     }
 
     public void compose(List<Property> properties) {
-        properties.forEach(property -> {
-            if ("Input".equals(property.getName())) {
-                this.setInput(Integer.parseInt(property.getValue()));
-            } else if ("Output".equals(property.getName())) {
-                this.setOutput(Integer.parseInt(property.getValue()));
-            } else if ("Efficiency".equals(property.getName())) {
-                this.setEffeciency(Integer.parseInt(property.getValue()));
-            }
-        });
+//        properties.forEach(property -> {
+//            if ("Input".equals(property.getName())) {
+//                this.setInput(Integer.parseInt(property.getValue()));
+//            } else if ("Output".equals(property.getName())) {
+//                this.setOutput(Integer.parseInt(property.getValue()));
+//            } else if ("Efficiency".equals(property.getName())) {
+//                this.setEffeciency(Integer.parseInt(property.getValue()));
+//            }
+//        });
     }
 }

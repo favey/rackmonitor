@@ -1,19 +1,23 @@
 package com.greywanchuang.rackmonitor.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "property")
+@Data
 public class Property {
     @Id
     @GeneratedValue
     private int id;
 
-    @Column
-    private int targetid;
+    @JoinColumn(name = "targetid", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
+    private Target target;
 
-    @Column
-    private String name;
+//    @Column
+//    private String name;
 
     @Column
     private String value;
@@ -21,43 +25,9 @@ public class Property {
     @Column
     private int timestamp;
 
-    public int getId() {
-        return id;
-    }
+    @JoinColumn(name = "config_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
+    private Config config;
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public int getTargetid() {
-        return targetid;
-    }
-
-    public void setTargetid(int targetid) {
-        this.targetid = targetid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public int getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(int timestamp) {
-        this.timestamp = timestamp;
-    }
 }

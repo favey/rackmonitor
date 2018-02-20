@@ -93,22 +93,22 @@ public class Power {
      * @param properties
      */
     public void composeServer(List<Property> properties) {
-        properties.forEach(property -> {
-            if ("Firmware".equals(property.getName())) {
-                this.setFirmware(property.getValue());
-
-            } else if ("Status".equals(property.getName())) {
-                this.setStatus(property.getValue());
-            } else if ("Health".equals(property.getName())) {
-                this.setHealth(property.getValue());
-            } else if ("PSUAmount".equals(property.getName())) {
-                this.setPsuamount(Integer.parseInt(property.getValue()));
-            } else if ("MaxPower".equals(property.getName())) {
-                this.setMaxpower(Integer.parseInt(property.getValue()));
-            } else if ("PSUControlMode".equals(property.getName())) {
-                this.setControlmode(property.getValue());
-            }
-        });
+//        properties.forEach(property -> {
+//            if ("Firmware".equals(property.getName())) {
+//                this.setFirmware(property.getValue());
+//
+//            } else if ("Status".equals(property.getName())) {
+//                this.setStatus(property.getValue());
+//            } else if ("Health".equals(property.getName())) {
+//                this.setHealth(property.getValue());
+//            } else if ("PSUAmount".equals(property.getName())) {
+//                this.setPsuamount(Integer.parseInt(property.getValue()));
+//            } else if ("MaxPower".equals(property.getName())) {
+//                this.setMaxpower(Integer.parseInt(property.getValue()));
+//            } else if ("PSUControlMode".equals(property.getName())) {
+//                this.setControlmode(property.getValue());
+//            }
+//        });
     }
 
     /**
@@ -118,15 +118,15 @@ public class Power {
      */
     public void composePUSs(List<Property> properties, String targetName) {
         PSU psu = new PSU();
-        properties.forEach(property -> {
-            if ("Health".equals(property.getName())) {
-                psu.setHealth(property.getValue());
-            } else if ("OutputVoltage".equals(property.getName())) {
-                psu.setVoltage(Float.parseFloat(property.getValue()));
-            } else if ("OutputCurrent".equals(property.getName())) {
-                psu.setCurrent(Float.parseFloat(property.getValue()));
-            }
-        });
+//        properties.forEach(property -> {
+//            if ("Health".equals(property.getName())) {
+//                psu.setHealth(property.getValue());
+//            } else if ("OutputVoltage".equals(property.getName())) {
+//                psu.setVoltage(Float.parseFloat(property.getValue()));
+//            } else if ("OutputCurrent".equals(property.getName())) {
+//                psu.setCurrent(Float.parseFloat(property.getValue()));
+//            }
+//        });
         if (targetName.contains("A")) {
             addPsuA(psu);
         } else {

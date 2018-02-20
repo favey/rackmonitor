@@ -53,15 +53,15 @@ public class FanGroup {
      * @param properties
      */
     public void composeGroup(List<Property> properties) {
-        properties.forEach(property -> {
-            if ("ExTemp".equals(property.getName())) {
-                this.setExtemp(Integer.parseInt(property.getValue()));
-            } else if ("Health".equals(property.getName())) {
-                this.setHealth(property.getValue());
-            } else if ("Power".equals(property.getName())) {
-                this.setPower(Integer.parseInt(property.getValue()));
-            }
-        });
+//        properties.forEach(property -> {
+//            if ("ExTemp".equals(property.getName())) {
+//                this.setExtemp(Integer.parseInt(property.getValue()));
+//            } else if ("Health".equals(property.getName())) {
+//                this.setHealth(property.getValue());
+//            } else if ("Power".equals(property.getName())) {
+//                this.setPower(Integer.parseInt(property.getValue()));
+//            }
+//        });
     }
 
     /**
@@ -70,17 +70,17 @@ public class FanGroup {
      * @param properties
      */
     public void conposeFan(List<Property> properties) {
-        Fan fan = new Fan();
-        properties.forEach(property -> {
-            if ("ID".equals(property.getName())) {
-                fan.setId(Integer.parseInt(property.getValue()));
-            } else if ("Health".equals(property.getName())) {
-                fan.setHealth(property.getValue());
-            } else if ("Speed".equals(property.getName())) {
-                fan.setSpeed(Integer.parseInt(property.getValue()));
-            }
-        });
-        this.addFan(fan);
+//        Fan fan = new Fan();
+//        properties.forEach(property -> {
+//            if ("ID".equals(property.getName())) {
+//                fan.setId(Integer.parseInt(property.getValue()));
+//            } else if ("Health".equals(property.getName())) {
+//                fan.setHealth(property.getValue());
+//            } else if ("Speed".equals(property.getName())) {
+//                fan.setSpeed(Integer.parseInt(property.getValue()));
+//            }
+//        });
+//        this.addFan(fan);
     }
 
 }

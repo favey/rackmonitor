@@ -163,53 +163,53 @@ public class Server {
      */
     public void compose(List<Property> properties) {
         Net net = new Net();
-        properties.forEach(property -> {
-            if ("ID".equals(property.getName())) {
-                this.setId(property.getValue());
-            } else if ("ProductName".equals(property.getName())) {
-                this.setProductname(property.getValue());
-            } else if ("SN".equals(property.getName())) {
-                this.setSn(property.getValue());
-            } else if ("Status".equals(property.getName())) {
-                this.setStatus(property.getValue());
-            } else if ("Health".equals(property.getName())) {
-                this.setHealth(property.getValue());
-            } else if ("Power".equals(property.getName())) {
-                this.setPower(Integer.parseInt(property.getValue()));
-            } else if ("BMCReset".equals(property.getName())) {
-                this.setBmcreset(property.getValue());
-            } else if ("EnTemp".equals(property.getName())) {
-                this.setEntemp(Integer.parseInt(property.getValue()));
-            } else if ("ExTemp".equals(property.getName())) {
-                this.setExtemp(Integer.parseInt(property.getValue()));
-            } else if ("CPU".equals(property.getName())) {
-                this.setCpu(property.getValue());
-            } else if ("CPUAmount".equals(property.getName())) {
-                this.setCpuamount(Integer.parseInt(property.getValue()));
-            } else if ("MemoryCapacity".equals(property.getName())) {
-                this.setMemorycapacity(Integer.parseInt(property.getValue()));
-            } else if ("MemoryAmount".equals(property.getName())) {
-                this.setMemoryamount(Integer.parseInt(property.getValue()));
-            } else if ("DiskCapacity".equals(property.getName())) {
-                this.setDiskcapacity(Integer.parseInt(property.getValue()));
-            } else if ("DiskAmount".equals(property.getName())) {
-                this.setDiskamount(Integer.parseInt(property.getValue()));
-            } else if ("Ethernet".equals(property.getName())) {
-                net.setName(property.getValue());
-            } else if ("IPMode".equals(property.getName())) {
-                net.setIpmode(property.getValue());
-            } else if ("IP".equals(property.getName())) {
-                net.setIp(property.getValue());
-            } else if ("Netmask".equals(property.getName())) {
-                net.setNetmask(property.getValue());
-            } else if ("Gateway".equals(property.getName())) {
-                net.setGateway(property.getValue());
-            } else if ("MAC1".equals(property.getName())) {
-                net.setMac(property.getValue());
-            }
+//        properties.forEach(property -> {
+//            if ("ID".equals(property.getName())) {
+//                this.setId(property.getValue());
+//            } else if ("ProductName".equals(property.getName())) {
+//                this.setProductname(property.getValue());
+//            } else if ("SN".equals(property.getName())) {
+//                this.setSn(property.getValue());
+//            } else if ("Status".equals(property.getName())) {
+//                this.setStatus(property.getValue());
+//            } else if ("Health".equals(property.getName())) {
+//                this.setHealth(property.getValue());
+//            } else if ("Power".equals(property.getName())) {
+//                this.setPower(Integer.parseInt(property.getValue()));
+//            } else if ("BMCReset".equals(property.getName())) {
+//                this.setBmcreset(property.getValue());
+//            } else if ("EnTemp".equals(property.getName())) {
+//                this.setEntemp(Integer.parseInt(property.getValue()));
+//            } else if ("ExTemp".equals(property.getName())) {
+//                this.setExtemp(Integer.parseInt(property.getValue()));
+//            } else if ("CPU".equals(property.getName())) {
+//                this.setCpu(property.getValue());
+//            } else if ("CPUAmount".equals(property.getName())) {
+//                this.setCpuamount(Integer.parseInt(property.getValue()));
+//            } else if ("MemoryCapacity".equals(property.getName())) {
+//                this.setMemorycapacity(Integer.parseInt(property.getValue()));
+//            } else if ("MemoryAmount".equals(property.getName())) {
+//                this.setMemoryamount(Integer.parseInt(property.getValue()));
+//            } else if ("DiskCapacity".equals(property.getName())) {
+//                this.setDiskcapacity(Integer.parseInt(property.getValue()));
+//            } else if ("DiskAmount".equals(property.getName())) {
+//                this.setDiskamount(Integer.parseInt(property.getValue()));
+//            } else if ("Ethernet".equals(property.getName())) {
+//                net.setName(property.getValue());
+//            } else if ("IPMode".equals(property.getName())) {
+//                net.setIpmode(property.getValue());
+//            } else if ("IP".equals(property.getName())) {
+//                net.setIp(property.getValue());
+//            } else if ("Netmask".equals(property.getName())) {
+//                net.setNetmask(property.getValue());
+//            } else if ("Gateway".equals(property.getName())) {
+//                net.setGateway(property.getValue());
+//            } else if ("MAC1".equals(property.getName())) {
+//                net.setMac(property.getValue());
+//            }
 
-            this.addNet(net);
-        });
+//            this.addNet(net);
+//        });
     }
 
     /**
@@ -220,24 +220,24 @@ public class Server {
     public static JSONObject conposeJson(List<Property> properties,String targetname)
     {
         JSONObject jsonObject=new JSONObject();
-        properties.forEach(property -> {
-            if("Status".equals(property.getName()))
-            {
-                jsonObject.put("status",property.getValue());
-            }else if("Health".equals(property.getName()))
-            {
-                jsonObject.put("health",property.getValue());
-            }else if("EnTemp".equals(property.getName()))
-            {
-                jsonObject.put("entemp",property.getValue());
-            }else if("ExTemp".equals(property.getName()))
-            {
-                jsonObject.put("extemp",property.getValue());
-            }else if("Power".equals(property.getName()))
-            {
-                jsonObject.put("power",property.getValue());
-            }
-        });
+//        properties.forEach(property -> {
+//            if("Status".equals(property.getName()))
+//            {
+//                jsonObject.put("status",property.getValue());
+//            }else if("Health".equals(property.getName()))
+//            {
+//                jsonObject.put("health",property.getValue());
+//            }else if("EnTemp".equals(property.getName()))
+//            {
+//                jsonObject.put("entemp",property.getValue());
+//            }else if("ExTemp".equals(property.getName()))
+//            {
+//                jsonObject.put("extemp",property.getValue());
+//            }else if("Power".equals(property.getName()))
+//            {
+//                jsonObject.put("power",property.getValue());
+//            }
+//        });
         String[] names=targetname.split("/");
         jsonObject.put("name",names[names.length-1]);
         return jsonObject;

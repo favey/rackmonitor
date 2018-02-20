@@ -1,6 +1,7 @@
 package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.entity.Config;
@@ -71,7 +72,7 @@ public class SystemSettingController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取系统配置", notes = " 获取当前系统所有的配置")
+    @ApiOperation(value = "获取所有监控设备的配置数据", notes = " 获取所有监控设备的配置数据")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
@@ -83,4 +84,17 @@ public class SystemSettingController {
         jsonArray.addAll(configList);
         return jsonArray.toJSONString();
     }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取指定监控设备的配置数据", notes = " 获取指定监控设备的配置数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
+    public String getConfig(@PathVariable(name = "id") int id) {
+       Config config=configRepository.findOne(id);
+        return JSONObject.toJSONString(config);
+    }
+
 }

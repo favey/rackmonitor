@@ -30,4 +30,8 @@ public class Target {
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
     private Target target;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "target")
+    @org.hibernate.annotations.ForeignKey(name = "none")
+    private Set<Property> properties = new HashSet<>();
 }

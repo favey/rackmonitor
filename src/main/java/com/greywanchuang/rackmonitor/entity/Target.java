@@ -1,9 +1,16 @@
 package com.greywanchuang.rackmonitor.entity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "target")
+@Data
+@EqualsAndHashCode(of = {"id"})
 public class Target {
 
     @Id
@@ -13,19 +20,14 @@ public class Target {
     @Column
     private String name;
 
-    public int getId() {
-        return id;
-    }
+    @Column
+    private String type;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "target")
+    @org.hibernate.annotations.ForeignKey(name = "none")
+    private Set<Target> childrenTargets = new HashSet<>();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
+    private Target target;
 }

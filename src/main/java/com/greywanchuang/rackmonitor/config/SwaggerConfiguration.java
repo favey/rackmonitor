@@ -26,7 +26,7 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("DCSV API v1.0")
-                .description("格雷皖创Smashmonitor API 接口文档" )
+                .description("格雷皖创 DataCenter SuperVision API 接口文档" )
                 .termsOfServiceUrl("http://www.greatcreative.com/")
                 .version("1.0.0")
                 .build();

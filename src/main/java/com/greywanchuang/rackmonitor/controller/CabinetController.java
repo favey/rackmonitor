@@ -1,13 +1,16 @@
 package com.greywanchuang.rackmonitor.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.entity.Cabinet;
 import com.greywanchuang.rackmonitor.entity.CabinetGroup;
+import com.greywanchuang.rackmonitor.entity.CabinetType;
 import com.greywanchuang.rackmonitor.repository.CabinetGroupRepository;
 import com.greywanchuang.rackmonitor.repository.CabinetRepository;
+import com.greywanchuang.rackmonitor.repository.CabinetTypeRepository;
 import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,6 +31,9 @@ public class CabinetController {
 
     @Autowired
     private CabinetGroupRepository cabinetGroupRepository;
+
+    @Autowired
+    private CabinetTypeRepository cabinetTypeRepository;
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "获取机柜概况信息(平面图)", notes = "获取机柜概况信息(平面图)")
@@ -244,7 +250,10 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/types", method = RequestMethod.GET)
     public String getCainets() {
-        return "";
+        List<CabinetType> cabinetTypes=cabinetTypeRepository.findAll();
+        JSONArray jsonArray=new JSONArray();
+        jsonArray.addAll(cabinetTypes);
+        return jsonArray.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -254,8 +263,12 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/type", method = RequestMethod.PUT)
-    public String createCainetType() {
-        return "";
+    public String createCainetType(@RequestBody Map<String,Object> reqMap) {
+        CabinetType cabinetType=new CabinetType();
+        cabinetType.setName(reqMap.get("name").toString());
+        cabinetType.setMemo(reqMap.get("desc").toString());
+        cabinetTypeRepository.save(cabinetType);
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -264,9 +277,10 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/type", method = RequestMethod.DELETE)
-    public String deleteCainetType(@RequestParam("id") int ctId) {
-        return "";
+    @RequestMapping(value = "/type/{id}", method = RequestMethod.DELETE)
+    public String deleteCainetType(@PathVariable("id") int ctId) {
+        cabinetTypeRepository.deleteById(ctId);
+        return Utils.success();
     }
 
 

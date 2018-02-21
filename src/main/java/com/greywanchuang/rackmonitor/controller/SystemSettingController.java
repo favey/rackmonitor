@@ -2,7 +2,6 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.entity.Config;
 import com.greywanchuang.rackmonitor.entity.Modifycfg;
@@ -45,6 +44,66 @@ public class SystemSettingController {
         modifycfg.setDeviceType((Integer) reqMap.get("device_type"));
         modifycfg.setTimestamp((int) (System.currentTimeMillis() / 1000));
         modifycfgRepository.save(modifycfg);
+
+        Config config = new Config();
+        config.setCategory(reqMap.get("category").toString());
+        config.setIp(reqMap.get("ip").toString());
+        config.setUser(reqMap.get("user").toString());
+        config.setPwd(reqMap.get("pwd").toString());
+        config.setDeviceId((Integer) reqMap.get("device_id"));
+        config.setDeviceType((Integer) reqMap.get("device_type"));
+        configRepository.save(config);
+        return Utils.success();
+    }
+
+    /**
+     * 需要先在modifycfg中添加一条删除记录，然后再更新config表中数据，再在modifycfg中增加一条添加记录
+     *
+     * @param reqMap
+     * @return
+     */
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "编辑系统配置", notes = "编辑系统配置")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/config/{id}", method = RequestMethod.PUT)
+    public String modifyConfig(@PathVariable("id") int id, @RequestBody Map<String, Object> reqMap) {
+        Config config = configRepository.findOne(id);
+        //modifycfg表中新增删除记录
+        Modifycfg modifycfgDel = new Modifycfg();
+        modifycfgDel.setOperate("0");
+        modifycfgDel.setTimestamp((int) (System.currentTimeMillis() / 1000));
+        modifycfgDel.setPwd(config.getPwd());
+        modifycfgDel.setUser(config.getUser());
+        modifycfgDel.setCategory(config.getCategory());
+        modifycfgDel.setIp(config.getIp());
+        modifycfgDel.setDeviceType(config.getDeviceType());
+        modifycfgDel.setDeviceId(config.getDeviceId());
+        modifycfgRepository.save(modifycfgDel);
+
+        //config中更新记录
+        config.setCategory(reqMap.get("category").toString());
+        config.setIp(reqMap.get("ip").toString());
+        config.setUser(reqMap.get("user").toString());
+        config.setPwd(reqMap.get("pwd").toString());
+        config.setDeviceId((Integer) reqMap.get("device_id"));
+        config.setDeviceType((Integer) reqMap.get("device_type"));
+        configRepository.save(config);
+
+        //modifycfg表中新增添加记录
+        Modifycfg modifycfg = new Modifycfg();
+        modifycfg.setCategory(reqMap.get("category").toString());
+        modifycfg.setIp(reqMap.get("ip").toString());
+        modifycfg.setUser(reqMap.get("user").toString());
+        modifycfg.setOperate("1");
+        modifycfg.setPwd(reqMap.get("pwd").toString());
+        modifycfg.setDeviceId((Integer) reqMap.get("device_id"));
+        modifycfg.setDeviceType((Integer) reqMap.get("device_type"));
+        modifycfg.setTimestamp((int) (System.currentTimeMillis() / 1000));
+        modifycfgRepository.save(modifycfg);
+
         return Utils.success();
     }
 
@@ -58,6 +117,7 @@ public class SystemSettingController {
     @RequestMapping(value = "/config/{id}", method = RequestMethod.DELETE)
     public String delConfig(@PathVariable(name = "id") int id) {
         Config config = configRepository.findOne(id);
+        //先将原数据移到modifycfg表中
         Modifycfg modifycfg = new Modifycfg();
         modifycfg.setOperate("0");
         modifycfg.setTimestamp((int) (System.currentTimeMillis() / 1000));
@@ -68,6 +128,9 @@ public class SystemSettingController {
         modifycfg.setDeviceType(config.getDeviceType());
         modifycfg.setDeviceId(config.getDeviceId());
         modifycfgRepository.save(modifycfg);
+
+        //删除config表中记录
+        configRepository.deleteById(id);
         return Utils.success();
     }
 
@@ -93,7 +156,7 @@ public class SystemSettingController {
     @Authorization
     @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
     public String getConfig(@PathVariable(name = "id") int id) {
-       Config config=configRepository.findOne(id);
+        Config config = configRepository.findOne(id);
         return JSONObject.toJSONString(config);
     }
 

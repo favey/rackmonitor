@@ -167,7 +167,7 @@ public class CabinetController {
         Object cgid = reqMap.get("cgid");
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById((Integer) cgid);
         Cabinet cabinet = new Cabinet();
-        cabinet.setCabinetGroup(cabinetGroup);
+        cabinet.setCgroup_id(cabinetGroup.getId());
 
         cabinet.setTypeName(reqMap.get("type").toString());
         cabinet.setModelNumer(reqMap.get("model").toString());

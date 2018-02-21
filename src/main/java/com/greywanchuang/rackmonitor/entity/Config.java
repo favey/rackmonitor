@@ -1,6 +1,7 @@
 package com.greywanchuang.rackmonitor.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(of = {"id"})
 public class Config {
     @Id
     @GeneratedValue
@@ -33,7 +35,7 @@ public class Config {
     @Column
     private int deviceId;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "config")
-    @org.hibernate.annotations.ForeignKey(name = "none")
-    private Set<Property> properties = new HashSet<>();
+//    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "config")
+//    @org.hibernate.annotations.ForeignKey(name = "none")
+//    private Set<Property> properties = new HashSet<>();
 }

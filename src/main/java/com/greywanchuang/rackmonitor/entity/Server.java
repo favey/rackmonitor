@@ -52,9 +52,12 @@ public class Server {
     @Column
     private int status=0;
 
-    @JoinColumn(name = "cabinet_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Cabinet cabinet;
+    @Column
+    private int cabinet_id;
+
+//    @JoinColumn(name = "cabinet_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Cabinet cabinet;
 
 
 

@@ -31,7 +31,7 @@ public class Target {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
     private Target target;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "target")
-    @org.hibernate.annotations.ForeignKey(name = "none")
-    private Set<Property> properties = new HashSet<>();
+//    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.ALL}, mappedBy = "target")
+//    @org.hibernate.annotations.ForeignKey(name = "none")
+//    private Set<Property> properties = new HashSet<>();
 }

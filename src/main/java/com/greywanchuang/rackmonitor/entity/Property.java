@@ -12,9 +12,12 @@ public class Property {
     @GeneratedValue
     private int id;
 
-    @JoinColumn(name = "targetid", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
-    private Target target;
+//    @JoinColumn(name = "targetid", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
+//    private Target target;
+
+    @Column
+    private int targetid;
 
 //    @Column
 //    private String name;
@@ -25,9 +28,12 @@ public class Property {
     @Column
     private int timestamp;
 
-    @JoinColumn(name = "config_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
-    private Config config;
+
+    @Column
+    private int config_id;
+//    @JoinColumn(name = "config_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, optional = true)
+//    private Config config;
 
 
 }

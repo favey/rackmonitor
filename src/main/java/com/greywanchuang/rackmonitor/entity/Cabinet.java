@@ -54,12 +54,15 @@ public class Cabinet {
     @Column
     private String doorSensorIP;
 
-    @JoinColumn(name = "cgroup_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private CabinetGroup cabinetGroup;
+    @Column
+    private int cgroup_id;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "cabinet")
-    private Set<Server> servers=new HashSet<>();
+//    @JoinColumn(name = "cgroup_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private CabinetGroup cabinetGroup;
+
+//    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "cabinet")
+//    private Set<Server> servers=new HashSet<>();
 
 
 }

@@ -93,7 +93,7 @@ public class ServerController {
         try {
             Server server = new Server();
             server.setLabel(reqMap.get("label").toString());
-            server.setCabinet(cabinet);
+            server.setCabinet_id(cabinet.getId());
             server.setDescription(reqMap.get("description").toString());
             server.setHeight((Integer) reqMap.get("height"));
             server.setWeight((Double) reqMap.get("weight"));
@@ -138,9 +138,9 @@ public class ServerController {
     public String editServerInfo(@PathVariable int id,@RequestBody Map<String, Object> reqMap) {
         Server server=serverRepository.findById(id);
         Object cid=reqMap.get("cid");
-        if(cid!=null && (Integer)cid!=server.getCabinet().getId() )
+        if(cid!=null && (Integer)cid!=server.getCabinet_id() )
         {
-            server.setCabinet(cabinetRepository.findById((Integer)cid));
+            server.setCabinet_id((Integer) cid);
         }
 
         server.setLabel(reqMap.get("label").toString());

@@ -22,8 +22,8 @@ public class CabinetGroup {
     @Column
     private int position;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "cabinetGroup")
+//    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE},mappedBy = "cabinetGroup")
 //    @JSONField(serialize = false)
-    private Set<Cabinet> cabinets=new HashSet<>();
+//    private Set<Cabinet> cabinets=new HashSet<>();
 
 }

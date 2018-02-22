@@ -40,24 +40,6 @@ public class MonitorDataController {
 //    }
 
 
-    @Authorization
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取最新时间戳", notes = "获取最新时间戳")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @RequestMapping(value = "/time", method = RequestMethod.GET)
-    public String getLatestTime() {
-        List<Integer> timestamp = propertyRepository.findNewstTimstamp(1);
-        JSONObject jsonObject = new JSONObject();
-        if (jsonObject.size() == 0) {
-            jsonObject.put("timestamp", Calendar.getInstance().getTimeInMillis());
-
-        } else {
-            jsonObject.put("timestamp", timestamp.get(0));
-        }
-        return jsonObject.toJSONString();
-    }
 
 //    @CrossOrigin(origins = "*", maxAge = 3600)
 //    @ApiOperation(value = "获取机柜前面板信息", notes = "获取机柜前面板信息")

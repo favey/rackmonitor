@@ -19,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1")
+@Deprecated
 public class CommonDataController {
 
     @Autowired
@@ -167,130 +168,5 @@ public class CommonDataController {
         return json.toJSONString();
     }
 
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "编辑PUE阈值", notes = "编辑PUE阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/pue_threshold", method = RequestMethod.POST)
-    public String editPUEThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Utils.error("Need 4 parameters!");
-        }
 
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("pue_%");
-        systemProperties.forEach(systemProperty -> {
-            if (reqMap.keySet().contains(systemProperty.getProp())) {
-                systemProperty.setVal(reqMap.get(systemProperty.getProp()).toString());
-                systemPropertyRepository.save(systemProperty);
-            }
-        });
-
-        return "Sucess";
-    }
-
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取PUE阈值", notes = "获取PUE阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/pue_threshold", method = RequestMethod.GET)
-    public String getPUEThreshold() {
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("pue_%");
-        JSONObject jsonObject = new JSONObject();
-        systemProperties.forEach((SystemProperty systemProperty) -> {
-            jsonObject.put(systemProperty.getProp(), systemProperty.getVal());
-        });
-        return jsonObject.toJSONString();
-    }
-
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "编辑温度阈值", notes = "编辑温度阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/temp_threshold", method = RequestMethod.POST)
-    public String editTempThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "Need 4 parameters!";
-        }
-
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("temp_%");
-        systemProperties.forEach(systemProperty -> {
-            if (reqMap.keySet().contains(systemProperty.getProp())) {
-                systemProperty.setVal(reqMap.get(systemProperty.getProp()).toString());
-                systemPropertyRepository.save(systemProperty);
-            }
-        });
-
-        return Utils.success();
-    }
-
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取温度阈值", notes = "获取温度阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/temp_threshold", method = RequestMethod.GET)
-    public String getTempThreshold() {
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("temp_%");
-        JSONObject jsonObject = new JSONObject();
-        systemProperties.forEach((SystemProperty systemProperty) -> {
-            jsonObject.put(systemProperty.getProp(), systemProperty.getVal());
-        });
-        return jsonObject.toJSONString();
-    }
-
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "编辑能耗阈值", notes = "编辑能耗阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/power_threshold", method = RequestMethod.POST)
-    public String editPowerThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Utils.error("Need 4 parameters!");
-        }
-
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("power_%");
-        systemProperties.forEach(systemProperty -> {
-            if (reqMap.keySet().contains(systemProperty.getProp())) {
-                systemProperty.setVal(reqMap.get(systemProperty.getProp()).toString());
-                systemPropertyRepository.save(systemProperty);
-            }
-        });
-
-        return Utils.success();
-    }
-
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取能耗阈值", notes = "获取能耗阈值")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @Authorization
-    @RequestMapping(value = "/power_threshold", method = RequestMethod.GET)
-    public String getPowerThreshold() {
-        List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("power_%");
-        JSONObject jsonObject = new JSONObject();
-        systemProperties.forEach((SystemProperty systemProperty) -> {
-            jsonObject.put(systemProperty.getProp(), systemProperty.getVal());
-        });
-        return jsonObject.toJSONString();
-    }
-
-    @RequestMapping(value = "help", method = RequestMethod.GET)
-    public String help() {
-        StringBuffer sb = new StringBuffer();
-
-        return sb.toString();
-    }
 }

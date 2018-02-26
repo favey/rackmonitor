@@ -40,7 +40,7 @@ public class Cabinet {
     private int space;
 
     @Column
-    private int weight;
+    private double weight;
 
     /**
      * 用于标记删除状态，0-正常，1-删除，但实际上并不删除
@@ -49,7 +49,7 @@ public class Cabinet {
     private int status=0;
 
     @Column
-    private double computedPower;
+    private int computedPower;
 
     @Column
     private String doorSensorIP;

@@ -46,11 +46,11 @@ public class CabinetController {
         Cabinet cabinet=cabinetRepository.findById(id);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("space",cabinet.getSpace());
-        jsonObject.put("power","1200 KW");
-        jsonObject.put("temp","40 C");
-        jsonObject.put("humidity","Normal");
+        jsonObject.put("power","1200");
+        jsonObject.put("temp","40");
+        jsonObject.put("humidity","N/A");
         jsonObject.put("door","N/A");
-        jsonObject.put("fan","Normal");
+        jsonObject.put("fan","N/A");
         return jsonObject.toJSONString();
     }
 
@@ -101,7 +101,18 @@ public class CabinetController {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         List<Cabinet> cabinets=cabinetRepository.findAllByCgroupId(id);
         JSONObject jsonObject= (JSONObject) JSONObject.toJSON(cabinetGroup);
-        jsonObject.put("cabinets",cabinets);
+        JSONArray array=new JSONArray() ;
+        cabinets.forEach(cabinet -> {
+            JSONObject jsonObj=new JSONObject();
+            jsonObj.put("space",cabinet.getSpace());
+            jsonObj.put("power","1200");
+            jsonObj.put("temp","40");
+            jsonObj.put("humidity","N/A");
+            jsonObj.put("door","N/A");
+            jsonObj.put("fan","N/A");
+            array.add(jsonObj);
+        });
+        jsonObject.put("cabinets",array);
         return jsonObject.toJSONString();
     }
 
@@ -178,8 +189,8 @@ public class CabinetController {
         cabinet.setSmpAddres(reqMap.get("smp").toString());
         cabinet.setSpace((Integer) reqMap.get("space"));
         cabinet.setLabel(reqMap.get("label").toString());
-        cabinet.setComputedPower((Double) reqMap.get("power"));
-        cabinet.setWeight((Integer) reqMap.get("weight"));
+        cabinet.setComputedPower((Integer) reqMap.get("power"));
+        cabinet.setWeight((Double) reqMap.get("weight"));
         cabinet.setDoorSensorIP(reqMap.get("dsIP").toString());
 
         cabinetRepository.save(cabinet);
@@ -199,8 +210,8 @@ public class CabinetController {
         cabinet.setModelNumer(reqMap.get("model").toString());
         cabinet.setSerialNumber(reqMap.get("serialNo").toString());
         cabinet.setLabel(reqMap.get("label").toString());
-        cabinet.setComputedPower((Double) reqMap.get("power"));
-        cabinet.setWeight((Integer) reqMap.get("weight"));
+        cabinet.setComputedPower((Integer) reqMap.get("power"));
+        cabinet.setWeight((Double) reqMap.get("weight"));
 
         cabinetRepository.save(cabinet);
 

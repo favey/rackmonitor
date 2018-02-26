@@ -167,10 +167,6 @@ public class DataCenterController {
     @Authorization
     @RequestMapping(value = "/pue_threshold", method = RequestMethod.POST)
     public String editPUEThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Utils.error("Need 4 parameters!");
-        }
 
         List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("pue_%");
         systemProperties.forEach(systemProperty -> {
@@ -180,7 +176,7 @@ public class DataCenterController {
             }
         });
 
-        return "Sucess";
+        return Utils.success();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -207,10 +203,6 @@ public class DataCenterController {
     @Authorization
     @RequestMapping(value = "/temp_threshold", method = RequestMethod.POST)
     public String editTempThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return "Need 4 parameters!";
-        }
 
         List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("temp_%");
         systemProperties.forEach(systemProperty -> {
@@ -247,10 +239,6 @@ public class DataCenterController {
     @Authorization
     @RequestMapping(value = "/power_threshold", method = RequestMethod.POST)
     public String editPowerThreshold(@RequestBody Map<String, Object> reqMap, HttpServletResponse reps) {
-        if (reqMap.size() != 4) {
-            reps.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Utils.error("Need 4 parameters!");
-        }
 
         List<SystemProperty> systemProperties = systemPropertyRepository.findAllByPropertyName("power_%");
         systemProperties.forEach(systemProperty -> {

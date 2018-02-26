@@ -45,7 +45,7 @@ public class CabinetController {
     public String getCainetPlaneView(@PathVariable int id) {
         Cabinet cabinet=cabinetRepository.findById(id);
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("label",cabinet.getLabel());
+        jsonObject.put("space",cabinet.getSpace());
         jsonObject.put("power","1200 KW");
         jsonObject.put("temp","40 C");
         jsonObject.put("humidity","Normal");
@@ -91,7 +91,7 @@ public class CabinetController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取指定机柜组信息", notes = "获取指定机柜组信息")
+    @ApiOperation(value = "获取指定机柜组信息", notes = "获取指定机柜组信息,并返回其下所有机柜基本信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
@@ -99,7 +99,10 @@ public class CabinetController {
     @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
     public String getCainetGroup(@PathVariable int id) {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
-        return JSONObject.toJSONString(cabinetGroup);
+        List<Cabinet> cabinets=cabinetRepository.findAllByCgroupId(id);
+        JSONObject jsonObject= (JSONObject) JSONObject.toJSON(cabinetGroup);
+        jsonObject.put("cabinets",cabinets);
+        return jsonObject.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -167,7 +170,7 @@ public class CabinetController {
         Object cgid = reqMap.get("cgid");
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById((Integer) cgid);
         Cabinet cabinet = new Cabinet();
-        cabinet.setCgroup_id(cabinetGroup.getId());
+        cabinet.setCgroupId(cabinetGroup.getId());
 
         cabinet.setTypeName(reqMap.get("type").toString());
         cabinet.setModelNumer(reqMap.get("model").toString());

@@ -55,7 +55,7 @@ public class Cabinet {
     private String doorSensorIP;
 
     @Column
-    private int cgroup_id;
+    private int cgroupId;
 
 //    @JoinColumn(name = "cgroup_id")
 //    @ManyToOne(fetch = FetchType.LAZY)

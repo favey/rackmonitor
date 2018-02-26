@@ -43,11 +43,11 @@ public class DataCenterController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("avgTemp", "50");
         jsonObject.put("power", "1240");
-        jsonObject.put("rHumidity", "58%");
+        jsonObject.put("rHumidity", "58");
         jsonObject.put("compute", "1200");
         jsonObject.put("memory", "800");
         jsonObject.put("storage", "500");
-        jsonObject.put("space","28%");
+        jsonObject.put("space","28");
         jsonObject.put("smoke", "Critical");
         jsonObject.put("leaking", "Normal");
         return jsonObject.toJSONString();

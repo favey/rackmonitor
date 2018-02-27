@@ -107,13 +107,13 @@ public class MonitorDataController {
         return powerJsons.toJSONString();
     }
 
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取服务器基本信息", notes = "获取服务器基本信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
-    })
-    @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
-    public String serverDetail(@RequestParam("id") String servername) {
+//    @CrossOrigin(origins = "*", maxAge = 3600)
+//    @ApiOperation(value = "获取服务器基本信息", notes = "获取服务器基本信息")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+//    })
+//    @RequestMapping(value = "/server_detail", method = RequestMethod.GET)
+//    public String serverDetail(@RequestParam("id") String servername) {
 //        StringBuffer serverTargetName = new StringBuffer("system/chassis1/");
 //        serverTargetName.append(servername).append("/");
 //        Target target = targetReposiroty.getByName(serverTargetName.toString());
@@ -122,8 +122,8 @@ public class MonitorDataController {
 //        Server server = new Server();
 //        server.compose(properties);
 //        return JSONObject.toJSONString(server);
-        return "";
-    }
+//        return "";
+//    }
 
 //    @CrossOrigin(origins = "*", maxAge = 3600)
 //    @ApiOperation(value = "获取机柜背面板信息", notes = "获取机柜背面板信息")

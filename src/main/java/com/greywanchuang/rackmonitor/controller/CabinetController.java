@@ -62,15 +62,16 @@ public class CabinetController {
     public String getCainetBasicInfo(@PathVariable int id) {
         Cabinet cabinet=cabinetRepository.findById(id);
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("totalPower","1200 KW");
-        jsonObject.put("usage","20%");
+        jsonObject.put("totalPower","1200");
+        jsonObject.put("usage","20");
         jsonObject.put("weight",cabinet.getWeight());
         jsonObject.put("humidity","Normal");
         jsonObject.put("door","N/A");
         jsonObject.put("fan","Normal");
-        jsonObject.put("tCurrent","10 A");
+        jsonObject.put("tCurrent","10");
         jsonObject.put("leaking","Normal");
         jsonObject.put("smoke","Normal");
+
         JSONObject tempJson=new JSONObject();
         tempJson.put("top","N/A");
         tempJson.put("middle","N/A");
@@ -85,6 +86,7 @@ public class CabinetController {
         infoJson.put("firmware","N/A");
         infoJson.put("mac","N/A");
         infoJson.put("netmask","N/A");
+        infoJson.put("ip","N/A");
         jsonObject.put("info",infoJson);
 
         return jsonObject.toJSONString();
@@ -222,7 +224,7 @@ public class CabinetController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取机柜PSU信息", notes = "获取机柜PSU信息")
+    @ApiOperation(value = "获取机柜PSU信息", notes = "获取机柜PSU（Power Supply Unit）的基本信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
@@ -242,6 +244,31 @@ public class CabinetController {
         jsonObject.put("firmware","N/A");
 
         return jsonObject.toJSONString();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "查看机柜的PSU中电源模块信息", notes = "机柜中的PSU中包含多个电源模块，该功能允许用户查看机柜中PSU（Power Supply Unit）的电源模块信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/psu_list", method = RequestMethod.POST)
+    public String getCabinetPSUList(@RequestBody Map<String,Object> reqMap)
+    {
+        Cabinet cabinet=cabinetRepository.findById((Integer) reqMap.get("cid"));
+        JSONArray jsonArray=new JSONArray();
+        JSONObject jsonObject;
+        for(int i=0;i<10;i++)
+        {
+            jsonObject=new JSONObject();
+            jsonObject.put("name","#"+i);
+            jsonObject.put("status","On");
+            jsonObject.put("voltage","5");
+            jsonObject.put("current","2");
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -299,6 +326,7 @@ public class CabinetController {
         cabinetTypeRepository.deleteById(ctId);
         return Utils.success();
     }
+
 
 
 }

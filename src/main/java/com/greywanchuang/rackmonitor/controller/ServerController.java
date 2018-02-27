@@ -38,7 +38,7 @@ public class ServerController {
         Server server = serverRepository.findById(id);
         if (server == null) {
             rsp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return "Server not Exist!";
+            return Utils.error("Server not Exist!");
         }
 
         JSONObject jsonObject=new JSONObject();

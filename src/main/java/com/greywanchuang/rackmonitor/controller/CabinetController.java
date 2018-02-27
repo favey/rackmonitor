@@ -110,6 +110,9 @@ public class CabinetController {
             jsonObj.put("humidity","N/A");
             jsonObj.put("door","N/A");
             jsonObj.put("fan","N/A");
+            jsonObj.put("id",cabinet.getId());
+            jsonObj.put("label",cabinet.getLabel());
+            jsonObj.put("type",cabinet.getTypeName());
             array.add(jsonObj);
         });
         jsonObject.put("cabinets",array);

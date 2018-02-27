@@ -18,14 +18,9 @@ public class Cabinet {
     @Column
     private  String label;
 
-    @Column
-    private String groupName;
 
     @Column
-    private String type;
-
-    @Column
-    private String typeName;
+    private String typeName; //类型名称
 
     @Column
     private String modelNumer;

@@ -154,7 +154,7 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/group/{id}", method = RequestMethod.POST)
-    public String editCainetGroup(@PathVariable int id, @RequestBody Map<String, Object> reqMap) {
+    public String editCainetGroup(@PathVariable("id") int id, @RequestBody Map<String, Object> reqMap) {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
         cabinetGroup.setLabel(reqMap.get("label").toString());
         cabinetGroup.setPosition((Integer) reqMap.get("position"));
@@ -209,7 +209,7 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String editCainet(@PathVariable int id, @RequestBody Map<String, Object> reqMap) {
+    public String editCainet(@PathVariable("id") int id, @RequestBody Map<String, Object> reqMap) {
         Cabinet cabinet = cabinetRepository.findById(id);
         cabinet.setModelNumer(reqMap.get("model").toString());
         cabinet.setSerialNumber(reqMap.get("serialNo").toString());
@@ -244,9 +244,10 @@ public class CabinetController {
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String editSMPAddress(@PathVariable("id") int id, @RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
-        Cabinet cabinet = cabinetRepository.findById(id);
+    @RequestMapping(value = "/smp", method = RequestMethod.POST)
+    public String editSMPAddress(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+        int cid= (int) reqMap.get("cid");
+        Cabinet cabinet = cabinetRepository.findById(cid);
         if (cabinet == null) {
             rsp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return Utils.error("Cabinet Not Exist!");

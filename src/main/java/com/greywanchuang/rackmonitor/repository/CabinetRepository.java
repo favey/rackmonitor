@@ -15,5 +15,5 @@ public interface CabinetRepository extends JpaRepository<Cabinet,Integer> {
     Cabinet save(Cabinet cabinet);
 
 
-    List<Cabinet> findAllByCgroupId(int id);
+    List<Cabinet> findAllByCgroupIdAndStatus(int id,int status);
 }

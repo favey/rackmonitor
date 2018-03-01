@@ -2,8 +2,6 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
 import com.greywanchuang.rackmonitor.entity.Cabinet;
 import com.greywanchuang.rackmonitor.entity.CabinetGroup;
@@ -18,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +42,14 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/plane_view/{id}", method = RequestMethod.GET)
     public String getCainetPlaneView(@PathVariable int id) {
-        Cabinet cabinet=cabinetRepository.findById(id);
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("space",cabinet.getSpace());
-        jsonObject.put("power","1200");
-        jsonObject.put("temp","40");
-        jsonObject.put("humidity","N/A");
-        jsonObject.put("door","N/A");
-        jsonObject.put("fan","N/A");
+        Cabinet cabinet = cabinetRepository.findById(id);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("space", cabinet.getSpace());
+        jsonObject.put("power", "1200");
+        jsonObject.put("temp", "40");
+        jsonObject.put("humidity", "N/A");
+        jsonObject.put("door", "N/A");
+        jsonObject.put("fan", "N/A");
         return jsonObject.toJSONString();
     }
 
@@ -60,40 +59,40 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/basic_info/{id}", method = RequestMethod.GET)
     public String getCainetBasicInfo(@PathVariable int id) {
-        Cabinet cabinet=cabinetRepository.findById(id);
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("totalPower","1200");
-        jsonObject.put("usage","20");
-        jsonObject.put("weight",cabinet.getWeight());
-        jsonObject.put("humidity","Normal");
-        jsonObject.put("door","N/A");
-        jsonObject.put("fan","Normal");
-        jsonObject.put("tCurrent","10");
-        jsonObject.put("leaking","Normal");
-        jsonObject.put("smoke","Normal");
+        Cabinet cabinet = cabinetRepository.findById(id);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("totalPower", "1200");
+        jsonObject.put("usage", "20");
+        jsonObject.put("weight", cabinet.getWeight());
+        jsonObject.put("humidity", "Normal");
+        jsonObject.put("door", "N/A");
+        jsonObject.put("fan", "Normal");
+        jsonObject.put("tCurrent", "10");
+        jsonObject.put("leaking", "Normal");
+        jsonObject.put("smoke", "Normal");
 
-        JSONObject tempJson=new JSONObject();
-        tempJson.put("top","N/A");
-        tempJson.put("middle","N/A");
-        tempJson.put("bottom","N/A");
-        tempJson.put("average","N/A");
-        tempJson.put("btu","N/A");
-        jsonObject.put("temp",tempJson);
+        JSONObject tempJson = new JSONObject();
+        tempJson.put("top", "N/A");
+        tempJson.put("middle", "N/A");
+        tempJson.put("bottom", "N/A");
+        tempJson.put("average", "N/A");
+        tempJson.put("btu", "N/A");
+        jsonObject.put("temp", tempJson);
 
-        JSONObject infoJson=new JSONObject();
-        infoJson.put("model",cabinet.getModelNumer());
-        infoJson.put("sn",cabinet.getSerialNumber());
-        infoJson.put("firmware","N/A");
-        infoJson.put("mac","N/A");
-        infoJson.put("netmask","N/A");
-        infoJson.put("ip","N/A");
-        jsonObject.put("info",infoJson);
+        JSONObject infoJson = new JSONObject();
+        infoJson.put("model", cabinet.getModelNumer());
+        infoJson.put("sn", cabinet.getSerialNumber());
+        infoJson.put("firmware", "N/A");
+        infoJson.put("mac", "N/A");
+        infoJson.put("netmask", "N/A");
+        infoJson.put("ip", "N/A");
+        jsonObject.put("info", infoJson);
 
         return jsonObject.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取指定机柜组信息", notes = "获取指定机柜组信息,并返回其下所有机柜基本信息")
+    @ApiOperation(value = "获取指定机柜组信息", notes = "获取指定机柜组信息,并返回其下所有状态不为1的机柜信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
@@ -101,23 +100,23 @@ public class CabinetController {
     @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
     public String getCainetGroup(@PathVariable int id) {
         CabinetGroup cabinetGroup = cabinetGroupRepository.findById(id);
-        List<Cabinet> cabinets=cabinetRepository.findAllByCgroupId(id);
-        JSONObject jsonObject= (JSONObject) JSONObject.toJSON(cabinetGroup);
-        JSONArray array=new JSONArray() ;
+        List<Cabinet> cabinets = cabinetRepository.findAllByCgroupIdAndStatus(id, 0);
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(cabinetGroup);
+        JSONArray array = new JSONArray();
         cabinets.forEach(cabinet -> {
-            JSONObject jsonObj=new JSONObject();
-            jsonObj.put("space",cabinet.getSpace());
-            jsonObj.put("power","1200");
-            jsonObj.put("temp","40");
-            jsonObj.put("humidity","N/A");
-            jsonObj.put("door","N/A");
-            jsonObj.put("fan","N/A");
-            jsonObj.put("id",cabinet.getId());
-            jsonObj.put("label",cabinet.getLabel());
-            jsonObj.put("type",cabinet.getTypeName());
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("space", cabinet.getSpace());
+            jsonObj.put("power", "1200");
+            jsonObj.put("temp", "40");
+            jsonObj.put("humidity", "N/A");
+            jsonObj.put("door", "N/A");
+            jsonObj.put("fan", "N/A");
+            jsonObj.put("id", cabinet.getId());
+            jsonObj.put("label", cabinet.getLabel());
+            jsonObj.put("type", cabinet.getTypeName());
             array.add(jsonObj);
         });
-        jsonObject.put("cabinets",array);
+        jsonObject.put("cabinets", array);
         return jsonObject.toJSONString();
     }
 
@@ -129,7 +128,7 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/group_list", method = RequestMethod.GET)
     public String getCainetGroupList() {
-        List<CabinetGroup> cabinetGroupList=cabinetGroupRepository.findAll();
+        List<CabinetGroup> cabinetGroupList = cabinetGroupRepository.findAll();
         return JSONObject.toJSONString(cabinetGroupList);
     }
 
@@ -192,10 +191,10 @@ public class CabinetController {
         cabinet.setModelNumer(reqMap.get("model").toString());
         cabinet.setSerialNumber(reqMap.get("serialNo").toString());
         cabinet.setSmpAddres(reqMap.get("smp").toString());
-        cabinet.setSpace((Integer) reqMap.get("space"));
+        cabinet.setSpace(Integer.parseInt(reqMap.get("space").toString()));
         cabinet.setLabel(reqMap.get("label").toString());
-        cabinet.setComputedPower((Integer) reqMap.get("power"));
-        cabinet.setWeight((Double) reqMap.get("weight"));
+        cabinet.setComputedPower(Integer.parseInt(reqMap.get("power").toString()));
+        cabinet.setWeight(Double.parseDouble(reqMap.get("weight").toString()));
         cabinet.setDoorSensorIP(reqMap.get("dsIP").toString());
 
         cabinetRepository.save(cabinet);
@@ -215,12 +214,53 @@ public class CabinetController {
         cabinet.setModelNumer(reqMap.get("model").toString());
         cabinet.setSerialNumber(reqMap.get("serialNo").toString());
         cabinet.setLabel(reqMap.get("label").toString());
-        cabinet.setComputedPower((Integer) reqMap.get("power"));
-        cabinet.setWeight((Double) reqMap.get("weight"));
+        cabinet.setComputedPower(Integer.parseInt(reqMap.get("power").toString()));
+        cabinet.setWeight(Double.parseDouble(reqMap.get("weight").toString()));
 
         cabinetRepository.save(cabinet);
 
         return Utils.success();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取机柜风扇列表", notes = "获取机柜风扇列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/fans", method = RequestMethod.POST)
+    public String getFans(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+        Object cidObj = reqMap.get("cid");
+        if (cidObj == null) {
+            rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return Utils.error("No Cabinet ID");
+        }
+        return "";
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "编辑机柜SMP信息", notes = "编辑机柜SMP信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String editSMPAddress(@PathVariable("id") int id, @RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+        Cabinet cabinet = cabinetRepository.findById(id);
+        if (cabinet == null) {
+            rsp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return Utils.error("Cabinet Not Exist!");
+        }
+        Object obj = reqMap.get("smp");
+        if (obj == null) {
+            rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return Utils.error("Wrong Param!");
+
+        }
+
+        cabinet.setSmpAddres(obj.toString());
+        return Utils.success();
+
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -230,18 +270,17 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/psu/{id}", method = RequestMethod.GET)
-    public String getCabinetPSUInfo(@PathVariable int id)
-    {
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("status","N/A");
-        jsonObject.put("health","N/A");
-        jsonObject.put("input","N/A");
-        jsonObject.put("output","N/A");
-        jsonObject.put("efficiency","N/A");
-        jsonObject.put("maxPower","N/A");
-        jsonObject.put("mount",0);
-        jsonObject.put("mode","N/A");
-        jsonObject.put("firmware","N/A");
+    public String getCabinetPSUInfo(@PathVariable int id) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", "N/A");
+        jsonObject.put("health", "N/A");
+        jsonObject.put("input", "N/A");
+        jsonObject.put("output", "N/A");
+        jsonObject.put("efficiency", "N/A");
+        jsonObject.put("maxPower", "N/A");
+        jsonObject.put("mount", 0);
+        jsonObject.put("mode", "N/A");
+        jsonObject.put("firmware", "N/A");
 
         return jsonObject.toJSONString();
     }
@@ -253,18 +292,16 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/psu_list", method = RequestMethod.POST)
-    public String getCabinetPSUList(@RequestBody Map<String,Object> reqMap)
-    {
-        Cabinet cabinet=cabinetRepository.findById((Integer) reqMap.get("cid"));
-        JSONArray jsonArray=new JSONArray();
+    public String getCabinetPSUList(@RequestBody Map<String, Object> reqMap) {
+        Cabinet cabinet = cabinetRepository.findById((Integer) reqMap.get("cid"));
+        JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject;
-        for(int i=0;i<10;i++)
-        {
-            jsonObject=new JSONObject();
-            jsonObject.put("name","#"+i);
-            jsonObject.put("status","On");
-            jsonObject.put("voltage","5");
-            jsonObject.put("current","2");
+        for (int i = 0; i < 10; i++) {
+            jsonObject = new JSONObject();
+            jsonObject.put("name", "#" + i);
+            jsonObject.put("status", "On");
+            jsonObject.put("voltage", "5");
+            jsonObject.put("current", "2");
             jsonArray.add(jsonObject);
         }
 
@@ -272,7 +309,7 @@ public class CabinetController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "移除机柜信息", notes = "移除机柜信息")
+    @ApiOperation(value = "移除机柜信息", notes = "移除机柜信息,实际上并不删除数据，只是标记数据为已删除")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
@@ -294,8 +331,8 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/types", method = RequestMethod.GET)
     public String getCainets() {
-        List<CabinetType> cabinetTypes=cabinetTypeRepository.findAll();
-        JSONArray jsonArray=new JSONArray();
+        List<CabinetType> cabinetTypes = cabinetTypeRepository.findAll();
+        JSONArray jsonArray = new JSONArray();
         jsonArray.addAll(cabinetTypes);
         return jsonArray.toJSONString();
     }
@@ -307,8 +344,8 @@ public class CabinetController {
     })
     @Authorization
     @RequestMapping(value = "/type", method = RequestMethod.PUT)
-    public String createCainetType(@RequestBody Map<String,Object> reqMap) {
-        CabinetType cabinetType=new CabinetType();
+    public String createCainetType(@RequestBody Map<String, Object> reqMap) {
+        CabinetType cabinetType = new CabinetType();
         cabinetType.setName(reqMap.get("name").toString());
         cabinetType.setMemo(reqMap.get("desc").toString());
         cabinetTypeRepository.save(cabinetType);
@@ -326,7 +363,6 @@ public class CabinetController {
         cabinetTypeRepository.deleteById(ctId);
         return Utils.success();
     }
-
 
 
 }

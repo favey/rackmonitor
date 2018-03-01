@@ -53,7 +53,7 @@ public class Server {
     private int status=0;
 
     @Column
-    private int cabinet_id;
+    private int cabinetId;
 
 //    @JoinColumn(name = "cabinet_id")
 //    @ManyToOne(fetch = FetchType.LAZY)

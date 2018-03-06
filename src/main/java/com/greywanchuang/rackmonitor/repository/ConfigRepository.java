@@ -12,4 +12,6 @@ public interface ConfigRepository extends JpaRepository<Config,Integer> {
     Config save(Config config);
 
     void deleteById(int id);
+
+    Config findByDeviceIdAndDeviceType(int deviceId,int deviceType);
 }

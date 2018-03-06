@@ -2,18 +2,17 @@ package com.greywanchuang.rackmonitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.greywanchuang.rackmonitor.authorization.annotation.Authorization;
-import com.greywanchuang.rackmonitor.entity.Cabinet;
-import com.greywanchuang.rackmonitor.entity.CabinetGroup;
-import com.greywanchuang.rackmonitor.entity.CabinetType;
-import com.greywanchuang.rackmonitor.repository.CabinetGroupRepository;
-import com.greywanchuang.rackmonitor.repository.CabinetRepository;
-import com.greywanchuang.rackmonitor.repository.CabinetTypeRepository;
+import com.greywanchuang.rackmonitor.entity.*;
+import com.greywanchuang.rackmonitor.repository.*;
 import com.greywanchuang.rackmonitor.util.Utils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +32,15 @@ public class CabinetController {
 
     @Autowired
     private CabinetTypeRepository cabinetTypeRepository;
+
+    @Autowired
+    private ConfigRepository configRepository;
+
+    @Autowired
+    private PropertyRepository propertyRepository;
+
+    @Autowired
+    private TargetReposiroty targetReposiroty;
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "获取机柜概况信息(平面图)", notes = "获取机柜概况信息(平面图)")
@@ -114,6 +122,7 @@ public class CabinetController {
             jsonObj.put("id", cabinet.getId());
             jsonObj.put("label", cabinet.getLabel());
             jsonObj.put("type", cabinet.getTypeName());
+            jsonObj.put("status", cabinet.getStatus());
             array.add(jsonObj);
         });
         jsonObject.put("cabinets", array);
@@ -223,19 +232,116 @@ public class CabinetController {
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
-    @ApiOperation(value = "获取机柜风扇列表", notes = "获取机柜风扇列表")
+    @ApiOperation(value = "获取指定机柜的风扇墙视图列表", notes = "获取指定机柜的风扇墙视图列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
     @Authorization
-    @RequestMapping(value = "/fans", method = RequestMethod.POST)
-    public String getFans(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+    @RequestMapping(value = "/fwView", method = RequestMethod.POST)
+    public String getFangWallView(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
         Object cidObj = reqMap.get("cid");
         if (cidObj == null) {
             rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return Utils.error("No Cabinet ID");
+            return Utils.error(" Cabinet ID '" + cidObj.toString() + "' Not Exist");
         }
-        return "";
+        Cabinet cabinet = cabinetRepository.findById((Integer) cidObj);
+        Config config = configRepository.findByDeviceIdAndDeviceType((Integer) cidObj, 2);
+        //获取最新时间戳
+        int nTimestamp = propertyRepository.findNewestRMCTime();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", cabinet.getTypeName());
+
+        //找出所有的风扇墙
+        List<Target> targets = targetReposiroty.findCoolings();
+        JSONArray jsonArray = new JSONArray();
+
+        targets.forEach(target -> {
+            int targetid = target.getId();
+            String targetName = target.getName();
+            String idStr = targetName.substring(targetName.indexOf("colling") + 1, targetName.length() - 1);
+            //目前风扇墙ID和状态的targetid与风扇墙target的id差为2和3，此处可暂时取巧计算
+            List<Property> properties = propertyRepository.findCoolsIdAndHealth(targetid + 2, targetid + 3, config.getId(), nTimestamp);
+            JSONObject json = new JSONObject();
+            json.put("id", "#" + idStr);
+            properties.forEach(property -> {
+                if (property.getTargetid() - targetid == 3) {
+                    json.put("status", property.getValue());
+
+                } else {
+                    json.put("id", "#" + property.getValue());
+                }
+            });
+            jsonArray.add(json);
+        });
+
+        jsonObject.put("fanwall", jsonArray);
+        return jsonObject.toJSONString();
+    }
+
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @ApiOperation(value = "获取指定机柜的风扇墙信息列表", notes = "获取指定机柜的风扇墙信息列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    @Authorization
+    @RequestMapping(value = "/fwInfo", method = RequestMethod.POST)
+    public String getFanWallInfo(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
+        Object cidObj = reqMap.get("cid");
+        if (cidObj == null) {
+            rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return Utils.error(" Cabinet ID '" + cidObj.toString() + "' Not Exist");
+        }
+        Cabinet cabinet = cabinetRepository.findById((Integer) cidObj);
+        Config config = configRepository.findByDeviceIdAndDeviceType((Integer) cidObj, 2);
+        //获取最新时间戳
+        int nTimestamp = propertyRepository.findNewestRMCTime();
+        //找出所有风扇相关的target备用
+        List<Target> targets = targetReposiroty.findTargetByRange(952, 1151);
+        Map<Integer, Target> targetMap = convertTargetMap(targets);
+        List<Target> coolingTargets = targetReposiroty.findCoolings();
+        JSONArray fwsJson=new JSONArray();
+        coolingTargets.forEach(target -> {
+            int targetid = target.getId();
+            String targetName = target.getName();
+            JSONObject jsonObject = new JSONObject();
+            String idStr = targetName.substring(targetName.indexOf("colling") + 1, targetName.length() - 1);
+            //目前风扇墙ID、状态、能耗的targetid与风扇墙target的id差为2、3和4，此处可暂时取巧计算
+            List<Property> properties = propertyRepository.findCoolsIdAndHealth(targetid + 2, targetid + 4, config.getId(), nTimestamp);
+            properties.forEach(property -> {
+                int val = property.getTargetid() - targetid;
+                jsonObject.put("id", "fw" + property.getValue());
+                switch (val) {
+                    case 3:
+                        jsonObject.put("status", property.getValue());
+                    case 4:
+                        jsonObject.put("power", property.getValue());
+                }
+            });
+            JSONArray jsonArray = new JSONArray();
+            List<Property> fanProperties = propertyRepository.findCoolsIdAndHealth(targetid + 8, targetid + 11, config.getId(), nTimestamp);
+            fanProperties.forEach(property -> {
+                int val = property.getTargetid() - targetid;
+                JSONObject json = new JSONObject();
+                if (val == 9) {
+                    String targetFanName = targetMap.get(property.getTargetid()).getName();
+                    String idFanStr = targetName.substring(targetName.indexOf("fan") + 1, targetName.lastIndexOf("/")-1);
+
+                    json.put("id", idFanStr);
+                } else if (val == 10) {
+                    json.put("status", property.getValue());
+                } else if (val == 11) {
+                    json.put("rpm", property.getValue());
+                }
+
+                jsonArray.add(json);
+            });
+            jsonObject.put("fans",jsonArray);
+            fwsJson.add(jsonObject);
+        });
+        //找出所有的风扇墙ID
+
+
+        return fwsJson.toJSONString();
     }
 
     @CrossOrigin(origins = "*", maxAge = 3600)
@@ -246,7 +352,7 @@ public class CabinetController {
     @Authorization
     @RequestMapping(value = "/smp", method = RequestMethod.POST)
     public String editSMPAddress(@RequestBody Map<String, Object> reqMap, HttpServletResponse rsp) {
-        int cid= (int) reqMap.get("cid");
+        int cid = (int) reqMap.get("cid");
         Cabinet cabinet = cabinetRepository.findById(cid);
         if (cabinet == null) {
             rsp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -365,5 +471,19 @@ public class CabinetController {
         return Utils.success();
     }
 
+    /**
+     * 将List转为Map，以ID为key
+     *
+     * @param targets
+     * @return
+     */
+    public Map<Integer, Target> convertTargetMap(List<Target> targets) {
+        Map<Integer, Target> targetMap = new HashedMap();
+        targets.forEach(target -> {
+            targetMap.put(target.getId(), target);
+        });
+
+        return targetMap;
+    }
 
 }

@@ -291,51 +291,52 @@ public class CabinetController {
             rsp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return Utils.error(" Cabinet ID '" + cidObj.toString() + "' Not Exist");
         }
-        Cabinet cabinet = cabinetRepository.findById((Integer) cidObj);
+//        Cabinet cabinet = cabinetRepository.findById((Integer) cidObj);
         Config config = configRepository.findByDeviceIdAndDeviceType((Integer) cidObj, 2);
         //获取最新时间戳
         int nTimestamp = propertyRepository.findNewestRMCTime();
         //找出所有风扇相关的target备用
         List<Target> targets = targetReposiroty.findTargetByRange(952, 1151);
+        System.out.println("Target Length:"+targets.size());
         Map<Integer, Target> targetMap = convertTargetMap(targets);
+        //先拿到10组风扇墙targetid
         List<Target> coolingTargets = targetReposiroty.findCoolings();
         JSONArray fwsJson=new JSONArray();
         coolingTargets.forEach(target -> {
             int targetid = target.getId();
             String targetName = target.getName();
             JSONObject jsonObject = new JSONObject();
-            String idStr = targetName.substring(targetName.indexOf("colling") + 1, targetName.length() - 1);
+            String idStr = targetName.substring(targetName.indexOf("cooling") + 7, targetName.length() - 1);
             //目前风扇墙ID、状态、能耗的targetid与风扇墙target的id差为2、3和4，此处可暂时取巧计算
-            List<Property> properties = propertyRepository.findCoolsIdAndHealth(targetid + 2, targetid + 4, config.getId(), nTimestamp);
+
+            //先拿到每个风扇墙的基本信息
+            List<Property> properties = propertyRepository.findCoolsIdAndHealth(targetid + 2, targetid + 5, config.getId(), nTimestamp);
             properties.forEach(property -> {
-                int val = property.getTargetid() - targetid;
-                jsonObject.put("id", "fw" + property.getValue());
+                int tid=property.getTargetid();
+                int val = tid - targetid;
+                jsonObject.put("id", "fw" + idStr);
                 switch (val) {
                     case 3:
                         jsonObject.put("status", property.getValue());
                     case 4:
                         jsonObject.put("power", property.getValue());
+                    case    5:
+                        jsonObject.put("exTemp",property.getValue());
                 }
+
             });
+
             JSONArray jsonArray = new JSONArray();
-            List<Property> fanProperties = propertyRepository.findCoolsIdAndHealth(targetid + 8, targetid + 11, config.getId(), nTimestamp);
-            fanProperties.forEach(property -> {
-                int val = property.getTargetid() - targetid;
-                JSONObject json = new JSONObject();
-                if (val == 9) {
-                    String targetFanName = targetMap.get(property.getTargetid()).getName();
-                    String idFanStr = targetName.substring(targetName.indexOf("fan") + 1, targetName.lastIndexOf("/")-1);
+            //拿第一组风扇信息
+            getFanInfo(targetid,8,11,config.getId(),nTimestamp,jsonArray,targetMap);
+            //拿第二组风扇信息
+            getFanInfo(targetid,12,15,config.getId(),nTimestamp,jsonArray,targetMap);
+            //拿第三组风扇信息
+            getFanInfo(targetid,16,19,config.getId(),nTimestamp,jsonArray,targetMap);
 
-                    json.put("id", idFanStr);
-                } else if (val == 10) {
-                    json.put("status", property.getValue());
-                } else if (val == 11) {
-                    json.put("rpm", property.getValue());
-                }
-
-                jsonArray.add(json);
-            });
             jsonObject.put("fans",jsonArray);
+
+
             fwsJson.add(jsonObject);
         });
         //找出所有的风扇墙ID
@@ -343,6 +344,37 @@ public class CabinetController {
 
         return fwsJson.toJSONString();
     }
+
+    /**
+     * 获取制定风扇组信息
+     * @param targetid
+     * @param startNo
+     * @param endNo
+     * @param config_id
+     * @param timestamp
+     * @param jsonArray
+     * @param targetMap
+     */
+    private void getFanInfo(int targetid,int startNo,int endNo,int config_id,int timestamp,JSONArray jsonArray,Map<Integer,Target> targetMap)
+    {
+        List<Property> fanProperties = propertyRepository.findCoolsIdAndHealth(targetid + startNo, targetid + endNo, config_id, timestamp);
+        JSONObject json = new JSONObject();
+        fanProperties.forEach(property1 -> {
+            int val1 = property1.getTargetid() - targetid;
+            if (val1 == (startNo+1)) {
+                String targetFanName = targetMap.get(property1.getTargetid()).getName();
+                System.out.println(targetFanName);
+                String idFanStr = targetFanName.substring(targetFanName.indexOf("fan") + 3, targetFanName.lastIndexOf("/"));
+                json.put("id", idFanStr);
+            } else if (val1 == (endNo-1)) {
+                json.put("status", property1.getValue());
+            } else if (val1 == endNo) {
+                json.put("rpm", property1.getValue());
+            }
+        });
+        jsonArray.add(json);
+    }
+
 
     @CrossOrigin(origins = "*", maxAge = 3600)
     @ApiOperation(value = "编辑机柜SMP信息", notes = "编辑机柜SMP信息")

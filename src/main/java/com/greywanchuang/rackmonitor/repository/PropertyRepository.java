@@ -23,7 +23,7 @@ public interface PropertyRepository extends JpaRepository<Property,Integer> {
     @Query(value = "select timestamp from property where targetid<1314 order by timestamp DESC limit 1",nativeQuery = true)
     Integer findNewestRMCTime();
 
-    @Query(value = "from property where targetid between :startId AND :endId and config_id= :config_id and timestamp= :timastamp",nativeQuery = true)
+    @Query(value = "select * from property where targetid between :startId AND :endId and config_id= :config_id and timestamp= :timastamp",nativeQuery = true)
     List<Property> findCoolsIdAndHealth(@Param("startId")int startId,@Param("endId")int endId,@Param("config_id")int config_id,@Param("timastamp")int timastamp);
 
 //    @Query(" from Property p where p.targetid= :targetid and p.timestamp= :timestamp and name in ('EnTemp','ExTemp')")

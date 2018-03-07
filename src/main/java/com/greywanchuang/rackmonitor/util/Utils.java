@@ -68,7 +68,10 @@ public final class Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println((int)(System.currentTimeMillis()/1000));
+
+//        System.out.println((int)(System.currentTimeMillis()/1000));
+        String targetFanName="system/cooling6/fan16/ID";
+        System.out.println(targetFanName.substring(targetFanName.indexOf("fan") + 3, targetFanName.lastIndexOf("/")));
     }
 
 

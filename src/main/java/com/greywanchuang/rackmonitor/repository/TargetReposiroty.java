@@ -21,9 +21,9 @@ public interface TargetReposiroty extends JpaRepository<Target, Integer> {
     @Query(value = "SELECT id from target WHERE `name` LIKE '%chassis1%'", nativeQuery = true)
     List<Integer> findServerTargetIds();
 
-    @Query(value = "from target where name REGEXP 'system/cooling[0-9]*/$' ", nativeQuery = true)
+    @Query(value = "select * from target where name REGEXP 'system/cooling[0-9]*/$' ", nativeQuery = true)
     List<Target> findCoolings();
 
-    @Query(value = "from target where id between :startId and :endId ", nativeQuery = true)
+    @Query(value = "select * from target where id between :startId and :endId ", nativeQuery = true)
     List<Target> findTargetByRange(@Param("startId") int startId, @Param("endId") int endId);
 }
